@@ -116,7 +116,7 @@ public class WhenBuilder implements PushCondition, PullCondition {
             }
 
             if (working) {
-                if (evaluateConditions()) {
+                if (evaluateConditions(results)) {
                     doActs(results);
                     for (PushConditionListener t: conditionListeners)
                         t.push(WhenBuilder.this, true, sticky, results);
@@ -148,7 +148,7 @@ public class WhenBuilder implements PushCondition, PullCondition {
             return conditionsEvaluate;
         }
 
-        boolean evaluateLeftToRight() {
+        boolean evaluateLeftToRight(Object... results) {
 
             // we will evaluate if things meet their conditions one by one from left to right
 
@@ -191,8 +191,22 @@ public class WhenBuilder implements PushCondition, PullCondition {
                         else
                            isTriggered |= pullCondition.isMet(thing);
                     }
+
+                    for (Object thing: results) {
+                        if (thing instanceof Things) {
+                            Collection<Object> subThings = ((Things)thing).getThings();
+                            if (subThings != null)
+                                for (Object oneOfThings: subThings)
+                                    isTriggered |= pullCondition.isMet(oneOfThings);
+                        }
+                        else
+                            isTriggered |= pullCondition.isMet(thing);
+                    }
+
                     if (things.size() ==0)
                         isTriggered |= pullCondition.isMet(null);
+
+
                 }
                 conditionsEvaluate = updateEvaluation(conditionsLogic, conditionsEvaluate, isTriggered);
 
@@ -286,11 +300,11 @@ public class WhenBuilder implements PushCondition, PullCondition {
     List<GroupOfActsForThings> actsGroups = new ArrayList<GroupOfActsForThings>(1);
     GroupOfActsForThings currentActs;
 
-    public boolean evaluateConditions() {
+    public boolean evaluateConditions(Object... results) {
         boolean evaluates = true;
         Logic logic = Logic.AND;
         for (GroupOfConditionalThings conditionsGroup: conditionsGroups) {
-            boolean groupEvaluates = conditionsGroup.evaluateLeftToRight();
+            boolean groupEvaluates = conditionsGroup.evaluateLeftToRight(results);
 
             switch(logic) {
                 case AND_NOT:
