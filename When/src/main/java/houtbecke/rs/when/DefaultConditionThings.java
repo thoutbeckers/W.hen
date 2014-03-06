@@ -7,6 +7,9 @@ import java.util.Set;
 
 public class DefaultConditionThings<T> implements ConditionThings<T> {
 
+
+
+
     Set<T> things = new HashSet<T>(0);
 
     class PushConditionWithListener {
@@ -45,6 +48,17 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
     @Override
     public Set<T> getThings() {
         return things;
+    }
+
+    public PullCondition notOneOf(final Class filterClass) {
+        return new PullCondition() {
+            @Override
+            public boolean isMet(Object thing) {
+                if (filterClass.isInstance(thing) && !things.contains(thing))
+                    return true;
+                return false;
+            }
+        };
     }
 
 }
