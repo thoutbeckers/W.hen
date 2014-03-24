@@ -7,4 +7,6 @@ public interface Timer extends Condition {
     public void configure(long tillFirst, long recurring);
     public void start();
     public void stop();
+    public void restart();
+
 }
