@@ -55,6 +55,10 @@ public class BaseUpdateMenuItem extends TypedAct {
                             changeMenu(item, (Drawable)change);
                         else if (change instanceof String)
                             changeMenu(item, (String)change);
+                        else if (change instanceof Boolean)
+                            changeMenu(item, (boolean)change);
+                        else if (change == null)
+                            changeMenu(item);
 
                     }
 
@@ -65,6 +69,10 @@ public class BaseUpdateMenuItem extends TypedAct {
     public void changeMenu(MenuItem menuItem, int change) {}
     public void changeMenu(MenuItem menuItem, String change) {}
     public void changeMenu(MenuItem menuItem, Drawable change) {}
+    public void changeMenu(MenuItem menuItem, boolean change) {}
+    public void changeMenu(MenuItem menuItem) {}
+
+
 
     void addChange(int menuId, Object change) {
         synchronized (menuChanges) {
