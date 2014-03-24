@@ -2,9 +2,11 @@ package houtbecke.rs.when.robo.act;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.squareup.otto.Bus;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -51,18 +53,21 @@ public class PublishEvent implements Act {
     @Override
     public void act(Object... things) {
 
+        Log.i("LeBlue", "act for: "+ Arrays.toString(things));
+
         for (final Object thing: things) {
+
 
             if (handler != null){
                 if (handler.getLooper() == Looper.myLooper())
                     post(thing);
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        post(thing);
-                    }
-                });
+                else
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            post(thing);
+                        }
+                    });
             }
             else
                 post(thing);
