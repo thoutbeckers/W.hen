@@ -1,48 +1,52 @@
 package houtbecke.rs.when.condition;
 
 import java.util.TimerTask;
+import java.util.Timer;
 
 import houtbecke.rs.when.BasePushCondition;
 
-public class JavaUtilTimerCondition extends BasePushCondition implements Timer {
+public class JavaUtilTimerCondition extends BasePushCondition implements houtbecke.rs.when.condition.Timer {
 
-    java.util.Timer timer;
+    final Timer timer;
     TimerTask task;
 
     public JavaUtilTimerCondition() {
-        timer = new java.util.Timer();
+        timer = new Timer();
     }
 
-    long start = -1, repeat;
     boolean started = false;
 
+    public final int NOT_CONFIGURED = -1;
+
+    long start = NOT_CONFIGURED, repeat;
 
     @Override
     public void configure(long start, long repeat) {
         this.start = start;
         this.repeat = repeat;
-
     }
 
-    @Override
-    public void restart() {
+   public void restart() {
         if (started) {
             this.stop();
             this.start();
         }
     }
 
-    @Override
-    public void start() {
-        if (start == -1)
-            throw new IllegalStateException("Call configure first");
-        task  = new TimerTask() {
+    public synchronized void start() {
+        // ensure old task no longer is scheduled.
+        if (task != null)
+            task.cancel();
+
+        task = new TimerTask() {
             @Override
             public void run() {
                 event();
             }
         };
 
+        if (start == NOT_CONFIGURED)
+            throw new IllegalStateException("Call configure() first");
         timer.schedule(task, start, repeat);
         started = true;
     }
