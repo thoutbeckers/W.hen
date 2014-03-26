@@ -85,12 +85,17 @@ public class TypedAct implements Act {
         if (parameters == null || cachedMethod == null)
             return;
 
+        invokeMethod(cachedMethod, parameters);
+
+    }
+
+    public void invokeMethod(Method cachedMethod, Object... parameters) {
         try {
             cachedMethod.invoke(this, parameters);
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
+            throw new RuntimeException("error executing act", e);
         }
-
     }
 
     public Object[] tryMethod(Method method, Object[] objects) {
