@@ -14,11 +14,13 @@ public class ColorMenuItem extends BaseUpdateMenuItem {
 
     @Override
     public void changeMenu(MenuItem menuItem, int color) {
-        menuItem.getIcon().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        if (menuItem.getIcon() != null)
+            menuItem.getIcon().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
     @Override
-    public void changeMenu(MenuItem menuItem) {
-        menuItem.getIcon().clearColorFilter();
+    public void changeMenu(MenuItem menuItem,boolean change) {
+        if (!change)
+            menuItem.getIcon().clearColorFilter();
     }
 
 }
