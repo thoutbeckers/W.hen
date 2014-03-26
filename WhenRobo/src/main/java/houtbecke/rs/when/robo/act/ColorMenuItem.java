@@ -17,7 +17,7 @@ public class ColorMenuItem extends BaseUpdateMenuItem {
         menuItem.getIcon().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
     @Override
-    public void changeMenu(MenuItem menuItem) {
+    public void changeMenu(MenuItem menuItem,boolean change) {
         menuItem.getIcon().clearColorFilter();
     }
 
