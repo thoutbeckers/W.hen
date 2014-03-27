@@ -53,8 +53,6 @@ public class PublishEvent implements Act {
     @Override
     public void act(Object... things) {
 
-        Log.i("LeBlue", "act for: "+ Arrays.toString(things));
-
         for (final Object thing: things) {
 
 
