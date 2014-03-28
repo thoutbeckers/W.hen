@@ -41,8 +41,8 @@ public class PublishEvent implements Act {
         bus.register(this);
     }
 
-    public Object getLastValue(Class c) {
-        return eventTypeValueMap.get(c);
+    public <T> T getLastValue(Class<? extends T> c) {
+        return (T) eventTypeValueMap.get(c);
     }
 
     public boolean hasLastValue(Class c) {
