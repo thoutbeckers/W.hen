@@ -1,3 +1,4 @@
+import houtbecke.rs.when.BasePushCondition
 import houtbecke.rs.when.Condition
 import houtbecke.rs.when.PushCondition
 import houtbecke.rs.when.PushConditionListener
@@ -92,6 +93,31 @@ class ThingsTest extends groovy.util.GroovyTestCase {
         assert !things.things.contains(b)
 
 
+    }
+    void testNotOneOf() {
+        def object = new Object()
+
+        def things = new DefaultConditionThings()
+        def notOneOfCondition = things.notOneOf(Integer.class)
+        assert !notOneOfCondition.isMet(object)
+
+        def integer = new Integer(1)
+
+        assert notOneOfCondition.isMet(integer)
+        things.addThing(integer);
+        assert !notOneOfCondition.isMet(integer)
+    }
+
+    void testIsEmpty() {
+
+        def things = new DefaultConditionThings()
+        BasePushCondition isEmpty = things.IsEmpty();
+
+        BasePushCondition isNotEmpty = things.IsNotEmpty();
+        def object = new Object()
+        things.addThing(object);
+
+        things.removeThing(object);
     }
 
 }

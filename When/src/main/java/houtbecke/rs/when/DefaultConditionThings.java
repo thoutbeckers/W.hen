@@ -60,5 +60,69 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             }
         };
     }
+    public BasePushCondition IsEmpty() {
 
+        PushConditionListener pushConditionListener =   new PushConditionListener() {
+
+            @Override
+            public void push(Condition c, boolean conditionMet, boolean isSticky, Object... results) {
+
+            }
+        };
+        BasePushCondition basePushCondition =
+                new BasePushCondition() {
+
+                    @Override
+                    public void event(Object... results){
+                        if (things.isEmpty())
+                            super.event();
+                    }
+                    @Override
+                    public void addListener(PushConditionListener listener, Object thing) {
+                        event();
+                    }
+
+                    @Override
+                    public void removeListener(PushConditionListener listener, Object thing) {
+                        event();
+                    }
+                };
+
+        this.addPushCondition(basePushCondition, pushConditionListener);
+        return basePushCondition;
+    }
+
+    public BasePushCondition IsNotEmpty() {
+
+        PushConditionListener pushConditionListener =   new PushConditionListener() {
+
+            @Override
+            public void push(Condition c, boolean conditionMet, boolean isSticky, Object... results) {
+
+            }
+        };
+
+        BasePushCondition basePushCondition =
+                new BasePushCondition() {
+
+                    @Override
+                    public void event(Object... results){
+                        if (things.isEmpty())
+                            super.event();
+                    }
+                    @Override
+                    public void addListener(PushConditionListener listener, Object thing) {
+                        event();
+                    }
+
+                    @Override
+                    public void removeListener(PushConditionListener listener, Object thing) {
+                        event();
+                    }
+                };
+
+        this.addPushCondition(basePushCondition, pushConditionListener);
+        return basePushCondition;
+    }
 }
+
