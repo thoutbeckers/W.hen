@@ -1,3 +1,4 @@
+import houtbecke.rs.when.BasePushCondition
 import houtbecke.rs.when.Condition
 import houtbecke.rs.when.PushCondition
 import houtbecke.rs.when.PushConditionListener
@@ -93,6 +94,65 @@ class ThingsTest extends groovy.util.GroovyTestCase {
 
 
     }
+    void testNotOneOf() {
+        def object = new Object()
+
+        def things = new DefaultConditionThings()
+        def notOneOfCondition = things.notOneOf(Integer.class)
+        assert !notOneOfCondition.isMet(object)
+
+        def integer = new Integer(1)
+
+        assert notOneOfCondition.isMet(integer)
+        things.addThing(integer);
+        assert !notOneOfCondition.isMet(integer)
+    }
+
+
+
+    def emptyListener = new PushConditionListener() {
+
+        @Override
+        void push(Condition c, boolean conditionMet, boolean isSticky, Object... results) {
+            empty = true
+        }
+    }
+    def notEmptyListener = new PushConditionListener() {
+
+        @Override
+        void push(Condition c, boolean conditionMet, boolean isSticky, Object... results) {
+            notEmpty = true
+        }
+    }
+
+
+    def empty,notEmpty;
+
+    void testIsEmpty() {
+
+        def things = new DefaultConditionThings()
+        BasePushCondition isEmpty = things.IsEmpty();
+
+        BasePushCondition isNotEmpty = things.IsNotEmpty();
+
+        isEmpty.addListener(emptyListener,this);
+        isNotEmpty.addListener(notEmptyListener,this);
+
+        empty = false;
+        notEmpty = false;
+
+        def object = new Object()
+        things.addThing(object);
+        assert notEmpty;
+        assert !empty;
+        empty = false;
+        notEmpty = false;
+        things.removeThing(object);
+        assert empty;
+        assert !notEmpty;
+
+
+    }
+
 
 }
-
