@@ -25,16 +25,20 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
 
     @Override
     public void addThing(T thing) {
-        things.add(thing);
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.addListener(pwl.listener, thing);
+        things.add(thing);
+        isNotEmptyCondition.event();
+
     }
 
     @Override
     public void removeThing(T thing) {
-        things.remove(thing);
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.removeListener(pwl.listener, thing);
+        things.remove(thing);
+        isEmptyCondition.event();
+
     }
 
     @Override
@@ -60,74 +64,32 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             }
         };
     }
+
+    final BasePushCondition isEmptyCondition = new BasePushCondition() {
+        @Override
+        public void event(Object... results){
+            if (things.isEmpty())
+                super.event();
+        }
+
+    };
+
+
     public BasePushCondition IsEmpty() {
-
-        PushConditionListener pushConditionListener =   new PushConditionListener() {
-
-            @Override
-            public void push(Condition c, boolean conditionMet, boolean isSticky, Object... results) {
-
-            }
-        };
-        BasePushCondition basePushCondition =
-                new BasePushCondition() {
-
-                    @Override
-                    public void event(Object... results){
-                        if (things.isEmpty())
-                            super.event();
-                    }
-                    @Override
-                    public void addListener(PushConditionListener listener, Object thing) {
-                        super.addListener(listener,thing);
-
-                        event();
-                    }
-
-                    @Override
-                    public void removeListener(PushConditionListener listener, Object thing) {
-                        super.removeListener(listener,thing);
-
-                        event();
-                    }
-                };
-
-        this.addPushCondition(basePushCondition, pushConditionListener);
-        return basePushCondition;
+        return isEmptyCondition;
     }
 
+   final BasePushCondition isNotEmptyCondition =
+            new BasePushCondition() {
+
+                @Override
+                public void event(Object... results){
+                    if (!things.isEmpty())
+                        super.event();
+                }
+            };
+
     public BasePushCondition IsNotEmpty() {
-
-        PushConditionListener pushConditionListener =   new PushConditionListener() {
-
-            @Override
-            public void push(Condition c, boolean conditionMet, boolean isSticky, Object... results) {
-
-            }
-        };
-
-        BasePushCondition basePushCondition =
-                new BasePushCondition() {
-
-                    @Override
-                    public void event(Object... results){
-                        if (!things.isEmpty())
-                            super.event();
-                    }
-                    @Override
-                    public void addListener(PushConditionListener listener, Object thing) {
-                        super.addListener(listener,thing);
-                        event();
-                    }
-
-                    @Override
-                    public void removeListener(PushConditionListener listener, Object thing) {
-                        super.addListener(listener,thing);
-                        event();
-                    }
-                };
-
-        this.addPushCondition(basePushCondition, pushConditionListener);
-        return basePushCondition;
+        return isNotEmptyCondition;
     }
 }
