@@ -28,6 +28,8 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.addListener(pwl.listener, thing);
         things.add(thing);
+        isNotEmptyCondition.event();
+
     }
 
     @Override
@@ -35,6 +37,8 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.removeListener(pwl.listener, thing);
         things.remove(thing);
+        isEmptyCondition.event();
+
     }
 
     @Override
@@ -61,4 +65,31 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         };
     }
 
+    final BasePushCondition isEmptyCondition = new BasePushCondition() {
+        @Override
+        public void event(Object... results){
+            if (things.isEmpty())
+                super.event();
+        }
+
+    };
+
+
+    public BasePushCondition IsEmpty() {
+        return isEmptyCondition;
+    }
+
+   final BasePushCondition isNotEmptyCondition =
+            new BasePushCondition() {
+
+                @Override
+                public void event(Object... results){
+                    if (!things.isEmpty())
+                        super.event();
+                }
+            };
+
+    public BasePushCondition IsNotEmpty() {
+        return isNotEmptyCondition;
+    }
 }
