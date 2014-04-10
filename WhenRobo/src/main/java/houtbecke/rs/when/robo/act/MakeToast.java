@@ -14,11 +14,34 @@ public class MakeToast extends TypedAct {
     }
 
     public void act(String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        act(SHORT, text);
     }
 
-    public void act(int text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    public void act(Integer text) {
+        act(SHORT, text);
+    }
+
+
+    public void act(Length length,String text) {
+        Toast.makeText(context, text, length.length).show();
+    }
+
+    public void act(Length length, Integer text) {
+        Toast.makeText(context, text, length.length).show();
+    }
+
+    public static Length SHORT = Length.SHORT;
+    public static Length LONG = Length.LONG;
+
+    public static enum Length {
+        SHORT(Toast.LENGTH_SHORT),
+        LONG(Toast.LENGTH_LONG);
+
+        int length;
+        Length(int length) {
+            this.length = length;
+
+        }
     }
 
 }
