@@ -44,7 +44,6 @@ public class BasePushCondition implements PushCondition {
             for (PushConditionListener pcl: pcls.keySet())
                 pcl.push(this, isConditionMet, isSticky, results);
         }
-        return;
     }
 
     public void eventForThing(Object thing, Object... results) {
