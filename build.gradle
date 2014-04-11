@@ -1,15 +1,24 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+allprojects {
+    buildscript {
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
 buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
-    }
-}
 
-allprojects {
-    repositories {
-        mavenCentral()
+    dependencies {
+
+        // make sure an up to date version of httpmime is used for the coveralls plugin
+        classpath 'org.apache.httpcomponents:httpmime:4.3'
+
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.4.0'
+        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.9.1'
     }
 }
