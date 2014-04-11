@@ -1,15 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-
-    }
-}
+apply plugin: 'coveralls'
 
 dependencies {
     testCompile 'org.codehaus.groovy:groovy-all:2.1.2'
@@ -18,6 +10,9 @@ dependencies {
 }
 
 jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running tests."
     additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
