@@ -23,7 +23,8 @@ import houtbecke.rs.when.robo.condition.event.ViewClick;
 import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
 import android.view.MotionEvent;
-
+import houtbecke.rs.when.robo.condition.event.ViewTouchDown;
+import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
 
 public class EventHelper {
 
