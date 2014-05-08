@@ -83,4 +83,12 @@ public class EventHelper {
         bus.post(new MenuCreated(menu));
     }
 
+    public void onTouch(android.view.View v, MotionEvent motionevent) {
+        int action = motionevent.getAction();
+        if (action == MotionEvent.ACTION_DOWN) {
+            bus.post(new ViewTouchDown(v));
+        } else if (action == MotionEvent.ACTION_UP) {
+            bus.post(new ViewTouchUp(v));
+        }
+    }
 }
