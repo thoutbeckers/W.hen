@@ -22,6 +22,10 @@ import houtbecke.rs.when.robo.condition.event.MenuItemSelect;
 import houtbecke.rs.when.robo.condition.event.ViewClick;
 import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
+import android.view.MotionEvent;
+import houtbecke.rs.when.robo.condition.event.ViewTouchDown;
+import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
+
 public class EventHelper {
 
     Bus bus;
@@ -83,4 +87,12 @@ public class EventHelper {
         bus.post(new MenuCreated(menu));
     }
 
+    public void onTouch(android.view.View v, MotionEvent motionevent) {
+        int action = motionevent.getAction();
+        if (action == MotionEvent.ACTION_DOWN) {
+            bus.post(new ViewTouchDown(v));
+        } else if (action == MotionEvent.ACTION_UP) {
+            bus.post(new ViewTouchUp(v));
+        }
+    }
 }
