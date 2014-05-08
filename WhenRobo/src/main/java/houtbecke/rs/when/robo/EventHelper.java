@@ -22,6 +22,9 @@ import houtbecke.rs.when.robo.condition.event.MenuItemSelect;
 import houtbecke.rs.when.robo.condition.event.ViewClick;
 import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
+import android.view.MotionEvent;
+
+
 public class EventHelper {
 
     Bus bus;
