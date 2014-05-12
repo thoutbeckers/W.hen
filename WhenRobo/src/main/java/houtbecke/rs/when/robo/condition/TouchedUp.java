@@ -19,9 +19,8 @@ public class TouchedUp extends BasePushCondition {
     }
 
     @Subscribe public void onTouchUp(ViewTouchUp view) {
-        eventForThing(view.getResourceId());
-        eventForThing(view.getSourceClass());
+        eventForThing(view.getResourceId(),view.getObject());
+        eventForThing(view.getSourceClass(),view.getObject());
         eventForThing(view.getObject());
-
     }
 }
