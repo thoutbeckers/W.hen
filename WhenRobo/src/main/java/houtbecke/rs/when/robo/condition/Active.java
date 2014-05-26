@@ -33,6 +33,16 @@ public class Active extends BasePushCondition {
         onPause(event);
     }
 
+    @Subscribe
+    public void onFragmentEvent(FragmentResume event) {
+        onResume(event);
+    }
+
+    @Subscribe
+    public void onFragmentEvent(FragmentPause event) {
+        onPause(event);
+    }
+
     void onPause(PauseEvent pause) {
         stickForThing(pause.getSourceClass(), false);
         stickForThing(pause.getObject(), false);
