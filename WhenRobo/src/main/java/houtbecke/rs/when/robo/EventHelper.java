@@ -23,6 +23,8 @@ import houtbecke.rs.when.robo.condition.event.ViewClick;
 import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
 import android.view.MotionEvent;
+
+import houtbecke.rs.when.robo.condition.event.ViewTouchCancel;
 import houtbecke.rs.when.robo.condition.event.ViewTouchDown;
 import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
 
@@ -93,6 +95,10 @@ public class EventHelper {
             bus.post(new ViewTouchDown(v));
         } else if (action == MotionEvent.ACTION_UP) {
             bus.post(new ViewTouchUp(v));
+        } else if (action == MotionEvent.ACTION_CANCEL) {
+             bus.post(new ViewTouchCancel(v));
         }
+
+
     }
 }
