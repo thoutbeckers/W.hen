@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import houtbecke.rs.when.BasePushCondition;
 import houtbecke.rs.when.robo.condition.event.ActivityPause;
 import houtbecke.rs.when.robo.condition.event.ActivityResume;
+import houtbecke.rs.when.robo.condition.event.FragmentPause;
+import houtbecke.rs.when.robo.condition.event.FragmentResume;
 import houtbecke.rs.when.robo.event.PauseEvent;
 import houtbecke.rs.when.robo.event.ResumeEvent;
 
@@ -30,6 +32,16 @@ public class Active extends BasePushCondition {
 
     @Subscribe
     public void onActivityEvent(ActivityPause event) {
+        onPause(event);
+    }
+
+    @Subscribe
+    public void onFragmentEvent(FragmentResume event) {
+        onResume(event);
+    }
+
+    @Subscribe
+    public void onFragmentEvent(FragmentPause event) {
         onPause(event);
     }
 
