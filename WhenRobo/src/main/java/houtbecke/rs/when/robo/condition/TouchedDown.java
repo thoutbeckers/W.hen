@@ -19,9 +19,8 @@ public class TouchedDown extends BasePushCondition {
     }
 
     @Subscribe public void onTouchDown(ViewTouchDown view) {
-        eventForThing(view.getResourceId());
-        eventForThing(view.getSourceClass());
+        eventForThing(view.getResourceId(),view.getObject());
+        eventForThing(view.getSourceClass(),view.getObject());
         eventForThing(view.getObject());
-
     }
 }
