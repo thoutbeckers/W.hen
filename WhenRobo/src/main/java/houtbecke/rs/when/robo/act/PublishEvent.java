@@ -14,8 +14,9 @@ import java.util.Map;
 import javax.inject.*;
 
 import houtbecke.rs.when.Act;
+import houtbecke.rs.when.TypedAct;
 
-public class PublishEvent implements Act {
+public class PublishEvent extends TypedAct {
 
     final Bus bus;
     final Map<Class, Object> eventTypeValueMap;
@@ -56,7 +57,7 @@ public class PublishEvent implements Act {
 
 
     @Override
-    public void act(Object... things) {
+    public void defaultAct(Object... things) {
 
         for (final Object thing: things) {
 

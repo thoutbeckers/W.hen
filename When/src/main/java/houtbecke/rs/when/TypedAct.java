@@ -54,6 +54,7 @@ public class TypedAct implements Act {
     @Override
     public void act(Object... things) {
         if (things == null || things.length == 0) {
+            defaultAct(things);
             return;
         }
 
@@ -82,8 +83,10 @@ public class TypedAct implements Act {
         } else
             parameters = tryMethod(cachedMethod, things);
 
-        if (parameters == null || cachedMethod == null)
+        if (parameters == null || cachedMethod == null){
+            defaultAct(things);
             return;
+        }
 
         invokeMethod(cachedMethod, parameters);
 
@@ -147,5 +150,8 @@ public class TypedAct implements Act {
         return paramValues;
 
 
+    }
+
+    public void defaultAct(Object... things) {
     }
 }
