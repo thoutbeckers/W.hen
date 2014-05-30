@@ -13,8 +13,8 @@ public class TypedPushCondition extends BasePushCondition {
         if (m!=null)
             try {
                 m.invoke(this, thing);
-                // not much we can do except warn perhaps
             } catch (Exception e) {
+                throw new RuntimeException(e);
             }
     }
 }

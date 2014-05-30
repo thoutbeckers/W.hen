@@ -41,8 +41,13 @@ public class PublishEvent implements Act {
         bus.register(this);
     }
 
-    public Object getLastValue(Class c) {
-        return eventTypeValueMap.get(c);
+    public <T> T getLastValue(Class<? extends T> c) {
+        return (T) eventTypeValueMap.get(c);
+    }
+
+    public <T> T getLastValue(Class<? extends T> c, T defaultValue) {
+        T last = getLastValue(c);
+        return last == null ? defaultValue : last;
     }
 
     public boolean hasLastValue(Class c) {
@@ -54,7 +59,6 @@ public class PublishEvent implements Act {
     public void act(Object... things) {
 
         for (final Object thing: things) {
-
 
             if (handler != null){
                 if (handler.getLooper() == Looper.myLooper())
