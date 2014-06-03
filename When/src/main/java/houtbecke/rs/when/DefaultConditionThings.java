@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class DefaultConditionThings<T> implements ConditionThings<T> {
 
-    Set<T> things = new HashSet<T>(0);
+    Set<T> things = new HashSet<>(0);
 
     class PushConditionWithListener {
         PushConditionListener listener;
@@ -18,10 +18,13 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             this.listener = listener;
         }
     }
-    List<PushConditionWithListener> conditionsWithListener = new ArrayList<PushConditionWithListener>(0);
+    List<PushConditionWithListener> conditionsWithListener = new ArrayList<>(0);
 
     @Override
     public void addThing(T thing) {
+        if (things.contains(thing))
+            return;
+
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.addListener(pwl.listener, thing);
         things.add(thing);
@@ -31,6 +34,8 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
 
     @Override
     public void removeThing(T thing) {
+        if (!things.contains(thing))
+            return;
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.removeListener(pwl.listener, thing);
         things.remove(thing);
@@ -49,6 +54,14 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
     @Override
     public Set<T> getThings() {
         return things;
+    }
+
+
+    @Override
+    public String toString() {
+        return "DefaultConditionThings{" +
+                "things=" + things +
+                '}';
     }
 
     /**
