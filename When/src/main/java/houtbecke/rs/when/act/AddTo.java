@@ -3,7 +3,7 @@ package houtbecke.rs.when.act;
 import houtbecke.rs.when.Act;
 import houtbecke.rs.when.DefaultConditionThings;
 
-public class AddTo implements Act {
+public class AddTo<T> implements Act {
 
     Class[] classes = null;
     DefaultConditionThings theThings;
@@ -23,11 +23,13 @@ public class AddTo implements Act {
             if (classes != null)
                 for (Class c: classes) {
                     if (c.isInstance(thing)) {
+                        //noinspection unchecked
                         this.theThings.addThing(thing);
                         break;
                     }
                 }
             else
+                //noinspection unchecked
                 this.theThings.addThing(thing);
     }
 }

@@ -3,6 +3,7 @@ import houtbecke.rs.when.Condition
 import houtbecke.rs.when.PushCondition
 import houtbecke.rs.when.PushConditionListener
 import houtbecke.rs.when.DefaultConditionThings
+import houtbecke.rs.when.ThingsListener
 import houtbecke.rs.when.act.AddTo
 import houtbecke.rs.when.act.RemoveFrom
 
@@ -131,9 +132,9 @@ class ThingsTest extends groovy.util.GroovyTestCase {
     void testIsEmpty() {
 
         def things = new DefaultConditionThings()
-        BasePushCondition isEmpty = things.IsEmpty();
+        BasePushCondition isEmpty = things.isEmpty();
 
-        BasePushCondition isNotEmpty = things.IsNotEmpty();
+        BasePushCondition isNotEmpty = things.isNotEmpty();
 
         isEmpty.addListener(emptyListener,this);
         isNotEmpty.addListener(notEmptyListener,this);
@@ -154,5 +155,58 @@ class ThingsTest extends groovy.util.GroovyTestCase {
 
     }
 
+    class MyThingsListener implements ThingsListener<String> {
+        def added = 0
+        def removed = 0
+        def thingRemoved, thingAdded
 
+        @Override
+        void thingAdded(String s) {
+            added++
+            thingAdded = s;
+        }
+
+        @Override
+        void thingRemoved(String s) {
+            removed++
+            thingRemoved = s
+        }
+    }
+
+    void testObserve() {
+        def things = new DefaultConditionThings<String>()
+
+        def listener1 = new MyThingsListener()
+        def listener2 = new MyThingsListener()
+        things.observe(listener1)
+        things.observe(listener2)
+
+        things.addThing("hallo")
+        assert listener1.removed == 0
+        assert listener1.added == 1
+        assert listener1.thingAdded == "hallo"
+
+        things.addThing("hallo")
+        assert listener1.added == 1, "ensure no duplicate items are added"
+
+        things.addThing("how are you")
+        assert listener1.added == 2
+        assert listener1.thingAdded == "how are you"
+
+        things.removeThing("hallo")
+        assert listener1.removed == 1
+        assert listener1.thingRemoved == "hallo"
+
+        things.removeThing("hallo")
+        assert listener1.removed == 1, "ensure duplicate removal does not happen"
+
+        things.removeThing("merp")
+        assert listener1.removed == 1, "ensure removal of non existing things has no effect"
+
+        things.removeThing("how are you")
+        assert listener1.removed == 2
+        assert listener1.thingRemoved == "how are you"
+
+        assert listener1.removed == listener2.removed && listener1.added == listener2.added, "ensure both listeners were called"
+    }
 }
