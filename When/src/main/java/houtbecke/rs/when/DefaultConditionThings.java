@@ -31,7 +31,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         things.add(thing);
 
         for (ThingsListener<T> listener: thingsListeners)
-            listener.thingAdded(thing);
+            listener.thingAdded(this, thing);
 
         isNotEmptyCondition.event();
 
@@ -46,7 +46,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         things.remove(thing);
 
         for (ThingsListener<T> listener: thingsListeners)
-            listener.thingRemoved(thing);
+            listener.thingRemoved(this, thing);
 
         isEmptyCondition.event();
 
