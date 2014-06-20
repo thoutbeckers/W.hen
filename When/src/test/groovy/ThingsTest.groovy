@@ -3,6 +3,7 @@ import houtbecke.rs.when.Condition
 import houtbecke.rs.when.PushCondition
 import houtbecke.rs.when.PushConditionListener
 import houtbecke.rs.when.DefaultConditionThings
+import houtbecke.rs.when.Things
 import houtbecke.rs.when.ThingsListener
 import houtbecke.rs.when.act.AddTo
 import houtbecke.rs.when.act.RemoveFrom
@@ -161,13 +162,13 @@ class ThingsTest extends groovy.util.GroovyTestCase {
         def thingRemoved, thingAdded
 
         @Override
-        void thingAdded(String s) {
+        void thingAdded(Things<String> things, String s) {
             added++
             thingAdded = s;
         }
 
         @Override
-        void thingRemoved(String s) {
+        void thingRemoved(Things<String> things, String s) {
             removed++
             thingRemoved = s
         }
