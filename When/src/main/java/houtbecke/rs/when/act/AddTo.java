@@ -1,5 +1,7 @@
 package houtbecke.rs.when.act;
 
+import java.util.Arrays;
+
 import houtbecke.rs.when.Act;
 import houtbecke.rs.when.DefaultConditionThings;
 
@@ -31,5 +33,13 @@ public class AddTo<T> implements Act {
             else
                 //noinspection unchecked
                 this.theThings.addThing(thing);
+    }
+
+    @Override
+    public String toString() {
+        return "AddTo{" +
+                "classes=" + Arrays.toString(classes) +
+                ", theThings(" + theThings.getThings().size() +")"+
+                '}';
     }
 }

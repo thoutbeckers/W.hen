@@ -9,6 +9,15 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
 
     Set<T> things = new HashSet<>(0);
 
+    public DefaultConditionThings() {
+        this("things");
+    }
+
+    String name;
+    public DefaultConditionThings(String name) {
+        this.name = name;
+    }
+
     class PushConditionWithListener {
         PushConditionListener listener;
         PushCondition condition;
@@ -76,7 +85,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
     @Override
     public String toString() {
         return "DefaultConditionThings{" +
-                "things=" + things +
+                name+"=" + things +
                 '}';
     }
 
