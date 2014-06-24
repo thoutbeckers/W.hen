@@ -5,7 +5,7 @@ import java.util.Arrays;
 import houtbecke.rs.when.Act;
 import houtbecke.rs.when.DefaultConditionThings;
 
-public class AddTo<T> implements Act {
+public class AddTo implements Act {
 
     Class[] classes = null;
     DefaultConditionThings theThings;
