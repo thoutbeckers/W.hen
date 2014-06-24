@@ -2,12 +2,13 @@ package houtbecke.rs.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public class DefaultConditionThings<T> implements ConditionThings<T> {
 
-    Set<T> things = new HashSet<>(0);
+    Set<T> things = new LinkedHashSet<>(0);
 
     public DefaultConditionThings() {
         this("things");
@@ -149,7 +150,6 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             if (things.isEmpty())
                 super.event();
         }
-
     };
 
 
@@ -157,7 +157,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         return isEmptyCondition;
     }
 
-   final BasePushCondition isNotEmptyCondition =
+    final BasePushCondition isNotEmptyCondition =
             new BasePushCondition() {
 
                 @Override
