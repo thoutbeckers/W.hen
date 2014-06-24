@@ -5,6 +5,7 @@ import houtbecke.rs.when.MetaDataListener
 import houtbecke.rs.when.PullCondition
 import houtbecke.rs.when.SimpleAct
 import houtbecke.rs.when.W
+import houtbecke.rs.when.act.CreateMetaData
 import houtbecke.rs.when.act.StoreMetaData
 import houtbecke.rs.when.condition.HasMetaData
 import houtbecke.rs.when.condition.MetaDataStored;
@@ -116,7 +117,7 @@ public class MetaDataTest extends GroovyTestCase {
 
     }
 
-    void testMetaDataAct() {
+    void testStoreMetaData() {
         def store = new HashMapMetaDataStore<String>()
 
         def merp = new MetaData(object1, "merp", "derp")
@@ -133,6 +134,18 @@ public class MetaDataTest extends GroovyTestCase {
 
         assert store.getMetaData(object1, "merp") == "derp"
 
+    }
+
+    void testCreateMetaData() {
+        def store = new HashMapMetaDataStore<String>()
+
+        def object = new Integer(1)
+
+        def create = new CreateMetaData<String>(store, Integer.class, "merp", "derp")
+
+        create.act("some object", object, new StringBuilder("some other other object"))
+
+        assert store.getMetaData(object, "merp") == "derp"
     }
 
     void testHasMetaData() {
