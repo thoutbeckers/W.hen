@@ -12,6 +12,10 @@ public class HasMetaData<C, T> implements PullCondition {
     T field;
     String value;
 
+    public HasMetaData(Class<? extends C> objectClass, MetaDataStore<T> store, T field) {
+        this(objectClass, store, field, null);
+    }
+
     public HasMetaData(Class<? extends C> objectClass, MetaDataStore<T> store, T field, String value) {
         this.objectClass = objectClass;
         this.store = store;
@@ -23,6 +27,7 @@ public class HasMetaData<C, T> implements PullCondition {
     public boolean isMet(Object thing) {
         return
             objectClass.isInstance(thing)
-            && value.equals(store.getMetaData(thing, field));
+            &&
+            (value == null || value.equals(store.getMetaData(thing, field)));
     }
 }

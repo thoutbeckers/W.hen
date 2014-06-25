@@ -67,6 +67,7 @@ public abstract class ConditionThingsAdapter<T> extends BaseAdapter implements T
 
     @Override
     public Object getItem(int position) {
+
         Object[] lastItems = itemArray;
         if (lastItems == null) {
             lastItems = items.keySet().toArray();

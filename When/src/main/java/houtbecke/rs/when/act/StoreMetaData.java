@@ -6,6 +6,7 @@ import houtbecke.rs.when.TypedAct;
 
 public class StoreMetaData extends TypedAct {
 
+    @SuppressWarnings("unchecked")
     public void act(MetaData data, MetaDataStore store) {
         store.storeMetaData(data);
     }

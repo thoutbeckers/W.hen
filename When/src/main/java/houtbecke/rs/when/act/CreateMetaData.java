@@ -3,17 +3,14 @@ package houtbecke.rs.when.act;
 import houtbecke.rs.when.Act;
 import houtbecke.rs.when.MetaData;
 import houtbecke.rs.when.MetaDataStore;
-import houtbecke.rs.when.TypedAct;
 
-public class CreateMetaData<T> implements Act {
+public abstract class CreateMetaData<T> implements Act {
 
-    MetaDataStore<T> store;
-    Class clazz;
-    T field;
-    String value;
+    protected final Class clazz;
+    protected final T field;
+    protected final String value;
 
-    public CreateMetaData(MetaDataStore<T> store, Class clazz, T field, String value) {
-        this.store = store;
+    public CreateMetaData(Class clazz, T field, String value) {
         this.clazz = clazz;
         this.field = field;
         this.value = value;
@@ -22,7 +19,11 @@ public class CreateMetaData<T> implements Act {
     @Override
     public void act(Object... things) {
         for (Object thing: things)
-            if (clazz.isInstance(thing))
-                store.storeMetaData(new MetaData<T>(thing, field, value));
+            if (clazz.isInstance(thing)) {
+                onMetaDataFound(thing, field, value);
+            }
     }
+
+    public abstract void onMetaDataFound(Object object, T field, String value);
+
 }
