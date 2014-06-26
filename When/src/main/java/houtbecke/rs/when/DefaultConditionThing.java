@@ -2,6 +2,10 @@ package houtbecke.rs.when;
 
 public class DefaultConditionThing<T> extends DefaultConditionThings<T> implements ObservableThing<T> {
 
+    public DefaultConditionThing(String name) {
+        super(name);
+    }
+
     @Override
     public void setOrReplaceThing(T thing) {
         clearThing();

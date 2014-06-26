@@ -7,9 +7,16 @@ import houtbecke.rs.when.TypedAct;
 
 public class MakeToast extends TypedAct {
     Context context;
+    Toast toast = null;
 
     @javax.inject.Inject
     public MakeToast(Context context) {
+        this(context, null);
+    }
+
+    Class customClass;
+    public MakeToast(Context context, Class customClass) {
+        this.customClass = customClass;
         this.context = context;
     }
 
@@ -23,23 +30,48 @@ public class MakeToast extends TypedAct {
 
 
     public void act(Length length,String text) {
-        Toast.makeText(context, text, length.length).show();
+        if (length.dismissPrevious && toast != null)
+            toast.cancel();
+
+        toast = Toast.makeText(context, text, length.length);
+        toast.show();
     }
 
     public void act(Length length, Integer text) {
-        Toast.makeText(context, text, length.length).show();
+        act(text+"", length.length);
+    }
+
+    @Override
+    public void defaultAct(Object... things) {
+        if (customClass == null)
+            return;
+
+        Length l = SHORT;
+        String text = "";
+        for (Object thing: things)
+            if (thing instanceof Length)
+                l = (Length) thing;
+            else if (customClass.isInstance(thing))
+                text+=thing.toString()+'\n';
+        if (text.length() > 0)
+            act(l, text.substring(0, text.length() - 1));
     }
 
     public static Length SHORT = Length.SHORT;
     public static Length LONG = Length.LONG;
 
     public static enum Length {
-        SHORT(Toast.LENGTH_SHORT),
-        LONG(Toast.LENGTH_LONG);
+        SHORT(Toast.LENGTH_SHORT, false),
+        LONG(Toast.LENGTH_LONG, false),
+        SHORT_DISMISS_PREVIOUS(Toast.LENGTH_SHORT, true),
+        LONG_DISMISS_PREVIOUS(Toast.LENGTH_LONG, true);
+
 
         int length;
-        Length(int length) {
+        boolean dismissPrevious;
+        Length(int length, boolean dismissPrevious) {
             this.length = length;
+            this.dismissPrevious = dismissPrevious;
 
         }
     }
