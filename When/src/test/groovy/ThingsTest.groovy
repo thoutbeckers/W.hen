@@ -217,24 +217,26 @@ class ThingsTest extends groovy.util.GroovyTestCase {
         assert listener1.thingAdded == "hallo"
 
         things.addThing("hallo")
-        assert listener1.added == 1, "ensure no duplicate items are added"
+        assert listener1.added == 2 && listener1.removed == 1, "ensure duplicate items are added, since they are removed and added"
+        assert listener1.thingRemoved == "hallo"
 
         things.addThing("how are you")
-        assert listener1.added == 2
+        assert listener1.added == 3
         assert listener1.thingAdded == "how are you"
 
+        listener1.thingRemoved = null
         things.removeThing("hallo")
-        assert listener1.removed == 1
+        assert listener1.removed == 2
         assert listener1.thingRemoved == "hallo"
 
         things.removeThing("hallo")
-        assert listener1.removed == 1, "ensure duplicate removal does not happen"
+        assert listener1.removed == 2, "ensure duplicate removal does not happen"
 
         things.removeThing("merp")
-        assert listener1.removed == 1, "ensure removal of non existing things has no effect"
+        assert listener1.removed == 2, "ensure removal of non existing things has no effect"
 
         things.removeThing("how are you")
-        assert listener1.removed == 2
+        assert listener1.removed == 3
         assert listener1.thingRemoved == "how are you"
 
         assert listener1.removed == listener2.removed && listener1.added == listener2.added, "ensure both listeners were called"

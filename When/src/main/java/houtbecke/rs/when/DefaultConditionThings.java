@@ -33,7 +33,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
     @Override
     public void addThing(T thing) {
         if (things.contains(thing))
-            return;
+            this.removeThing(thing);
 
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.addListener(pwl.listener, thing);
