@@ -3,7 +3,6 @@ package houtbecke.rs.when.robo.act;
 import com.squareup.otto.Bus;
 
 import houtbecke.rs.when.MetaData;
-import houtbecke.rs.when.MetaDataStore;
 import houtbecke.rs.when.act.CreateMetaData;
 
 public class CreateAndPublishMetaData<T> extends CreateMetaData<T> {
