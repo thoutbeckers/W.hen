@@ -22,14 +22,19 @@ public class Replace<T> implements Act {
         for (Object thing: things)
             if (clazz.isInstance(thing)) {
                 //noinspection unchecked
-                this.theThing.setOrReplaceThing(thing);
+                setOrReplaceThing(thing);
                 break;
             }
     }
 
+    @SuppressWarnings("unchecked")
+    protected void setOrReplaceThing(Object thing) {
+        theThing.setOrReplaceThing(thing);
+    }
+
     @Override
     public String toString() {
-        return "AddTo{" +
+        return "Replace {" +
                 "classes=" + clazz +
                 ", theThing(" + Arrays.deepToString(theThing.getThings().toArray())+")"+
                 '}';

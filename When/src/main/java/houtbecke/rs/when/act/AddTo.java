@@ -26,13 +26,17 @@ public class AddTo implements Act {
                 for (Class c: classes) {
                     if (c.isInstance(thing)) {
                         //noinspection unchecked
-                        this.theThings.addThing(thing);
+                        addThing(thing);
                         break;
                     }
                 }
             else
                 //noinspection unchecked
-                this.theThings.addThing(thing);
+                addThing(thing);
+    }
+
+    protected void addThing(Object thing) {
+        theThings.addThing(thing);
     }
 
     @Override
