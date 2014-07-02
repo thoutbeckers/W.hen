@@ -1,11 +1,13 @@
 package houtbecke.rs.when.robo.act;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import houtbecke.rs.when.TypedAct;
+import houtbecke.rs.when.robo.OnUiThread;
 
-public class MakeToast extends TypedAct {
+public class MakeToast extends AndroidTypedAct {
     Context context;
     Toast toast = null;
 
@@ -20,29 +22,34 @@ public class MakeToast extends TypedAct {
         this.context = context;
     }
 
+    @OnUiThread
     public void act(String text) {
         act(SHORT, text);
     }
 
+    @OnUiThread
     public void act(Integer text) {
         act(SHORT, text);
     }
 
 
+    @OnUiThread
     public void act(Length length,String text) {
         if (length.dismissPrevious && toast != null)
             toast.cancel();
 
         toast = Toast.makeText(context, text, length.length);
         toast.show();
+        Log.i("TOAST", "with text: " + text);
     }
 
+    @OnUiThread
     public void act(Length length, Integer text) {
         act(text+"", length.length);
     }
 
     @Override
-    public void defaultAct(Object... things) {
+    public void defaultActOnUi(Object... things) {
         if (customClass == null)
             return;
 

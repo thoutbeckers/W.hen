@@ -1,6 +1,6 @@
 package houtbecke.rs.when;
 
-public class DefaultConditionThing<T> extends DefaultConditionThings<T> implements ObservableThing<T> {
+public class DefaultConditionThing<T> extends DefaultConditionThings<T> implements Thing<T> {
 
     public DefaultConditionThing(String name) {
         super(name);
@@ -8,15 +8,8 @@ public class DefaultConditionThing<T> extends DefaultConditionThings<T> implemen
 
     @Override
     public void setOrReplaceThing(T thing) {
-        clearThing();
+        clear();
         super.addThing(thing);
-    }
-
-    @Override
-    public void clearThing() {
-        if (getThings().size() > 0)
-            for (T t : getThings())
-                super.removeThing(t);
     }
 
     @Override
@@ -24,8 +17,4 @@ public class DefaultConditionThing<T> extends DefaultConditionThings<T> implemen
         throw new RuntimeException("Cannot use add method for single thing");
     }
 
-    @Override
-    public void removeThing(T thing) {
-        throw new RuntimeException("Cannot use remove method for single thing");
-    }
 }

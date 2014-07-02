@@ -3,6 +3,7 @@ package houtbecke.rs.when.robo;
 import android.widget.BaseAdapter;
 
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

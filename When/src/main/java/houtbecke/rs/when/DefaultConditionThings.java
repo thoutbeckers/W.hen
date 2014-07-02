@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DefaultConditionThings<T> implements ConditionThings<T> {
+public class DefaultConditionThings<T> implements FilterConditionThings<T> {
 
     Set<T> things = new LinkedHashSet<>(0);
 
@@ -44,6 +44,15 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             listener.thingAdded(this, thing);
 
         isNotEmptyCondition.event();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void clear() {
+        Object[] allThings = things.toArray();
+        for (Object o: allThings) {
+            removeThing((T)o);
+        }
 
     }
 
@@ -97,6 +106,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
      * @param filterClass the class to which a thing would have to be an instance of
      * @return The condition with which to test
      */
+    @Override
     public PullCondition notOneOf(final Class<? extends T> filterClass) {
         return new PullCondition() {
             @Override
@@ -123,6 +133,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
      * @param filterClass the class to which a thing would have to be an instance of
      * @return The condition with which to test
      */
+    @Override
     public PullCondition oneOf(final Class<? extends T> filterClass) {
         return new PullCondition() {
             @Override
@@ -153,6 +164,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
     };
 
 
+    @Override
     public BasePushCondition isEmpty() {
         return isEmptyCondition;
     }
@@ -167,6 +179,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
                 }
             };
 
+    @Override
     public BasePushCondition isNotEmpty() {
         return isNotEmptyCondition;
     }

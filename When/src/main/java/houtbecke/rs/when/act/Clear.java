@@ -1,19 +1,18 @@
 package houtbecke.rs.when.act;
 
 import houtbecke.rs.when.Act;
-import houtbecke.rs.when.DefaultConditionThing;
-import houtbecke.rs.when.DefaultConditionThings;
+import houtbecke.rs.when.ObservableThings;
+import houtbecke.rs.when.Things;
 
 public class Clear implements Act {
-    DefaultConditionThing theThing;
+    ObservableThings theThing;
 
-    public Clear(DefaultConditionThing thing) {
+    public Clear(ObservableThings thing) {
         this.theThing = thing;
     }
 
-
     @Override
     public void act(Object... things) {
-        theThing.clearThing();
+        theThing.clear();
     }
 }

@@ -3,20 +3,20 @@ package houtbecke.rs.when.robo.act;
 import android.os.Handler;
 import android.os.Looper;
 
-import houtbecke.rs.when.DefaultConditionThings;
+import houtbecke.rs.when.ConditionThings;
 import houtbecke.rs.when.act.AddTo;
 
 public class AddToOnUI extends AddTo {
     final Handler handler;
 
 
-    public AddToOnUI(DefaultConditionThings things) {
+    public AddToOnUI(ConditionThings things) {
         super(things);
         handler = new Handler(Looper.getMainLooper());
 
     }
 
-    public AddToOnUI(DefaultConditionThings things, Class... classes) {
+    public AddToOnUI(ConditionThings things, Class... classes) {
         super(things, classes);
         handler = new Handler(Looper.getMainLooper());
     }

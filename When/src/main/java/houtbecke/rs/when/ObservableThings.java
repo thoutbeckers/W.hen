@@ -6,6 +6,8 @@ public interface ObservableThings<T> extends Things<T> {
 
     void removeThing(T thing);
 
+    void clear();
+
     void observe(ThingsListener<T> listener);
 
 
