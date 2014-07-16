@@ -28,7 +28,6 @@ public class JavaUtilTimerCondition extends BasePushCondition implements houtbec
 
    public void restart() {
         if (started) {
-            
             this.stop();
             this.start();
         }
