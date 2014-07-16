@@ -63,7 +63,8 @@ public class JavaUtilTimerCondition extends BasePushCondition implements houtbec
 
     @Override
     public void stop() {
-        task.cancel();
+        if (task != null)
+            task.cancel();
         started = false;
     }
 }
