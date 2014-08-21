@@ -25,9 +25,13 @@ public class HasMetaData<C, T> implements PullCondition {
 
     @Override
     public boolean isMet(Object thing) {
-        return
-            objectClass.isInstance(thing)
-            &&
-            (value == null || value.equals(store.getMetaData(thing, field)));
+        if (objectClass.isInstance(thing)) {
+            String valueFromStore = store.getMetaData(thing, field);
+            if (value == null)
+                return valueFromStore != null;
+            return value.equals(valueFromStore);
+
+        }
+        return false;
     }
 }
