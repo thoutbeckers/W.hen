@@ -175,7 +175,7 @@ public class DefaultConditionThings<T> implements FilterConditionThings<T> {
                 @Override
                 public void event(Object... results){
                     if (!things.isEmpty())
-                        super.event();
+                        super.event(things.toArray());
                 }
             };
 
