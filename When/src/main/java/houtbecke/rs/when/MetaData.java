@@ -11,4 +11,13 @@ public class MetaData<T> {
         this.field = field;
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "MetaData{" +
+                "object=" + object +
+                ", field=" + field +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }
