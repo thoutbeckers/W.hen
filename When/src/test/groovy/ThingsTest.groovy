@@ -244,7 +244,7 @@ class ThingsTest extends groovy.util.GroovyTestCase {
 
 
     void testThing() {
-        def thing = new DefaultConditionThing<String>();
+        def thing = new DefaultConditionThing<String>("someThing");
         thing.setOrReplaceThing("merp");
         assert thing.getThings().toArray().size() == 1
         assert thing.getThings().toArray()[0] == "merp"
@@ -253,15 +253,16 @@ class ThingsTest extends groovy.util.GroovyTestCase {
         assert thing.getThings().toArray().size() == 1
         assert thing.getThings().toArray()[0] == "herp"
 
-        thing.clearThing()
+        thing.clear()
         assert thing.getThings().toArray().size() == 0
 
         shouldFail { thing.addThing("merp") }
-        shouldFail { thing.removeThing("derp") }
+
+
     }
 
     void testAddedRemoved() {
-        def thing= new DefaultConditionThing<String>();
+        def thing= new DefaultConditionThing<String>("someThing");
 
         assert thing.toString() != null
 
