@@ -4,11 +4,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Build;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -77,12 +79,13 @@ public class EventHelper {
         bus.unregister(f);
     }
 
-    public void onClick(View v) {
-        bus.post(new ViewClick(v));
+    public void onClick(View v, Activity activity) {
+        bus.post(new ViewClick(v, activity));
     }
 
-    public void onMenuItemSelected(MenuItem item) {
-        bus.post(new MenuItemSelect(item));
+    public void onMenuItemSelected(MenuItem item,Activity activity) {
+        Log.i("posting", "posting onmenuitem");
+        bus.post(new MenuItemSelect(item,activity));
     }
 
     public void optionsMenuCreated(Menu menu) {
