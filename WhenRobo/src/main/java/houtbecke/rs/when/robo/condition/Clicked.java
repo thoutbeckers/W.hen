@@ -19,8 +19,8 @@ public class Clicked extends BasePushCondition {
     }
 
     @Subscribe public void onClick(ViewClick view) {
-        eventForThing(view.getResourceId(),view.getObject());
+        eventForThing(view.getResourceId(), view.getObject(), view.getActivity());
         eventForThing(view.getSourceClass(),view.getObject());
-        eventForThing(view.getObject());
+        eventForThing(view.getObject(),view.getObject());
     }
 }

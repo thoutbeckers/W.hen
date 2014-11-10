@@ -1,10 +1,12 @@
 package houtbecke.rs.when.robo.act;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,6 +17,7 @@ import javax.inject.*;
 
 import houtbecke.rs.when.Act;
 import houtbecke.rs.when.TypedAct;
+import houtbecke.rs.when.robo.condition.event.ActivityResume;
 
 public class PublishEvent extends TypedAct {
 
@@ -77,7 +80,7 @@ public class PublishEvent extends TypedAct {
         }
     }
 
-    private void post(Object thing) {
+    protected void post(Object thing) {
         if (postAll || eventTypeValueMap.containsKey(thing.getClass())) {
 
             if (saveLastValue)
@@ -86,5 +89,6 @@ public class PublishEvent extends TypedAct {
             bus.post(thing);
         }
     }
+
 }
 
