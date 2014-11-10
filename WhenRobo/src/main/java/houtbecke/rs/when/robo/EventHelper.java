@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Build;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +83,6 @@ public class EventHelper {
     }
 
     public void onMenuItemSelected(MenuItem item,Activity activity) {
-        Log.i("posting", "posting onmenuitem");
         bus.post(new MenuItemSelect(item,activity));
     }
 
