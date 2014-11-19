@@ -4,6 +4,8 @@ env:
     global:
     - TERM=dumb
 
+script: ./gradlew check
+
 after_success:
     - ./gradlew jacocoTestReport
     - ./gradlew coveralls
