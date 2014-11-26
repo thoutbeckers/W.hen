@@ -1,4 +1,4 @@
-git language: android
+language: android
 
 env:
     global:
