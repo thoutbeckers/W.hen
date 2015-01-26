@@ -6,21 +6,21 @@ import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
 import houtbecke.rs.when.BasePushCondition;
-import houtbecke.rs.when.robo.condition.event.ViewClick;
+import houtbecke.rs.when.robo.condition.event.ViewTouchCancel;
 
-public class Clicked extends BasePushCondition {
+public class TouchedCancel extends BasePushCondition {
 
     Bus bus;
 
     @Inject
-    public Clicked(Bus bus) {
+    public TouchedCancel(Bus bus) {
         bus.register(this);
         this.bus = bus;
     }
 
-    @Subscribe public void onClick(ViewClick view) {
-        eventForThing(view.getResourceId(), view.getObject(), view.getActivity());
+    @Subscribe public void onTouchCancel(ViewTouchCancel view) {
+        eventForThing(view.getResourceId(),view.getObject());
         eventForThing(view.getSourceClass(),view.getObject());
-        eventForThing(view.getObject(),view.getObject());
+        eventForThing(view.getObject());
     }
 }

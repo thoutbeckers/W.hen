@@ -32,4 +32,21 @@ public class AndroidTypedAct extends TypedAct {
         } else
             super.invokeMethod(cachedMethod, parameters);
     }
+
+    @Override
+    public void defaultAct(final Object... things) {
+        if (handler == null)
+            handler = new Handler(Looper.getMainLooper());
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                defaultActOnUi(things);
+            }
+        });
+    }
+
+    public void defaultActOnUi(final Object... things) {
+
+    }
 }

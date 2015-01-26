@@ -1,5 +1,7 @@
 package houtbecke.rs.when.robo.condition;
 
+import android.util.Log;
+
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -18,9 +20,9 @@ public class Selected extends BasePushCondition {
     }
 
     @Subscribe public void onSelected(MenuItemSelect item) {
-        eventForThing(item.getObject());
-        eventForThing(item.getResourceId());
-        eventForThing(item.getSourceClass());
+        eventForThing(item.getObject(),item.getObject(), item.getActivity());
+        eventForThing(item.getResourceId(), item.getResourceId(),item.getActivity());
+        eventForThing(item.getSourceClass(), item.getSourceClass(),item.getActivity());
     }
 
 

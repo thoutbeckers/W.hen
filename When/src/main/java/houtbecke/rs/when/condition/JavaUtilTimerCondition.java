@@ -26,6 +26,12 @@ public class JavaUtilTimerCondition extends BasePushCondition implements houtbec
         this.repeat = repeat;
     }
 
+    @Override
+    public void configure(long start) {
+        this.start = start;
+        this.repeat = 0;
+    }
+
    public void restart() {
         if (started) {
             this.stop();
@@ -47,7 +53,11 @@ public class JavaUtilTimerCondition extends BasePushCondition implements houtbec
 
         if (start == NOT_CONFIGURED)
             throw new IllegalStateException("Call configure() first");
-        timer.schedule(task, start, repeat);
+        if (repeat == 0) {
+            timer.schedule(task, start);
+        } else {
+            timer.schedule(task, start, repeat);
+        }
         started = true;
     }
 

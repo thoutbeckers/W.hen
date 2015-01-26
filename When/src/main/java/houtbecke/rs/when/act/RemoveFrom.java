@@ -1,17 +1,17 @@
 package houtbecke.rs.when.act;
 
 import houtbecke.rs.when.Act;
-import houtbecke.rs.when.DefaultConditionThings;
+import houtbecke.rs.when.ConditionThings;
 
 public class RemoveFrom implements Act {
-    DefaultConditionThings theThings;
+    ConditionThings theThings;
     Class[] classes = null;
 
-    public RemoveFrom(DefaultConditionThings things) {
+    public RemoveFrom(ConditionThings things) {
         this.theThings = things;
     }
 
-    public RemoveFrom(DefaultConditionThings things, Class... classes) {
+    public RemoveFrom(ConditionThings things, Class... classes) {
         this.theThings = things;
         this.classes = classes;
     }
@@ -22,12 +22,17 @@ public class RemoveFrom implements Act {
             if (classes != null)
                 for (Class c: classes) {
                     if (c.isInstance(thing)) {
-                        theThings.removeThing(thing);
+                        removeThing(thing);
                         break;
                     }
                 }
             else
-                theThings.removeThing(thing);
+                removeThing(thing);
 
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void removeThing(Object thing) {
+        theThings.removeThing(thing);
     }
 }

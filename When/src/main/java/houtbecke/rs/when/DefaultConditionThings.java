@@ -2,12 +2,22 @@ package houtbecke.rs.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DefaultConditionThings<T> implements ConditionThings<T> {
+public class DefaultConditionThings<T> implements FilterConditionThings<T> {
 
-    Set<T> things = new HashSet<T>(0);
+    Set<T> things = new LinkedHashSet<>(0);
+
+    public DefaultConditionThings() {
+        this("things");
+    }
+
+    String name;
+    public DefaultConditionThings(String name) {
+        this.name = name;
+    }
 
     class PushConditionWithListener {
         PushConditionListener listener;
@@ -18,24 +28,54 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             this.listener = listener;
         }
     }
-    List<PushConditionWithListener> conditionsWithListener = new ArrayList<PushConditionWithListener>(0);
+    List<PushConditionWithListener> conditionsWithListener = new ArrayList<>(0);
 
     @Override
     public void addThing(T thing) {
+        if (things.contains(thing))
+            this.removeThing(thing);
+
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.addListener(pwl.listener, thing);
+
         things.add(thing);
+
+        for (ThingsListener<T> listener: thingsListeners)
+            listener.thingAdded(this, thing);
+
         isNotEmptyCondition.event();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void clear() {
+        Object[] allThings = things.toArray();
+        for (Object o: allThings) {
+            removeThing((T)o);
+        }
 
     }
 
     @Override
     public void removeThing(T thing) {
+        if (!things.contains(thing))
+            return;
         for (PushConditionWithListener pwl: conditionsWithListener)
             pwl.condition.removeListener(pwl.listener, thing);
         things.remove(thing);
+
+        for (ThingsListener<T> listener: thingsListeners)
+            listener.thingRemoved(this, thing);
+
         isEmptyCondition.event();
 
+    }
+
+    Set<ThingsListener<T>> thingsListeners = new HashSet<>(0);
+
+    @Override
+    public void observe(ThingsListener<T> listener) {
+        thingsListeners.add(listener);
     }
 
     @Override
@@ -51,6 +91,14 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
         return things;
     }
 
+
+    @Override
+    public String toString() {
+        return "DefaultConditionThings{" +
+                name+"=" + things +
+                '}';
+    }
+
     /**
      * If a thing that is an instance of filterClass is not one of the things in this DefaultConditionThings
      * the return PullCondition will evaluate as met.
@@ -58,6 +106,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
      * @param filterClass the class to which a thing would have to be an instance of
      * @return The condition with which to test
      */
+    @Override
     public PullCondition notOneOf(final Class<? extends T> filterClass) {
         return new PullCondition() {
             @Override
@@ -84,6 +133,7 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
      * @param filterClass the class to which a thing would have to be an instance of
      * @return The condition with which to test
      */
+    @Override
     public PullCondition oneOf(final Class<? extends T> filterClass) {
         return new PullCondition() {
             @Override
@@ -111,25 +161,26 @@ public class DefaultConditionThings<T> implements ConditionThings<T> {
             if (things.isEmpty())
                 super.event();
         }
-
     };
 
 
-    public BasePushCondition IsEmpty() {
+    @Override
+    public BasePushCondition isEmpty() {
         return isEmptyCondition;
     }
 
-   final BasePushCondition isNotEmptyCondition =
+    final BasePushCondition isNotEmptyCondition =
             new BasePushCondition() {
 
                 @Override
                 public void event(Object... results){
                     if (!things.isEmpty())
-                        super.event();
+                        super.event(things.toArray());
                 }
             };
 
-    public BasePushCondition IsNotEmpty() {
+    @Override
+    public BasePushCondition isNotEmpty() {
         return isNotEmptyCondition;
     }
 

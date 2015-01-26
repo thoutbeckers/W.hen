@@ -1,10 +1,17 @@
 import houtbecke.rs.when.BasePushCondition
 import houtbecke.rs.when.Condition
+import houtbecke.rs.when.DefaultConditionThing
 import houtbecke.rs.when.PushCondition
 import houtbecke.rs.when.PushConditionListener
 import houtbecke.rs.when.DefaultConditionThings
+import houtbecke.rs.when.Things
+import houtbecke.rs.when.ThingsListener
+import houtbecke.rs.when.TypedAct
+import houtbecke.rs.when.W
 import houtbecke.rs.when.act.AddTo
 import houtbecke.rs.when.act.RemoveFrom
+import houtbecke.rs.when.condition.Added
+import houtbecke.rs.when.condition.Removed
 
 class ThingsTest extends groovy.util.GroovyTestCase {
 
@@ -94,12 +101,16 @@ class ThingsTest extends groovy.util.GroovyTestCase {
 
 
     }
+
     void testNotOneOf() {
         def object = new Object()
 
         def things = new DefaultConditionThings()
         def notOneOfCondition = things.notOneOf(Integer.class)
-        assert !notOneOfCondition.isMet(object)
+
+        assert notOneOfCondition.toString() != null
+
+        assert !notOneOfCondition.isMet(object), "type that is not Integer should not lead to the condition being triggered"
 
         def integer = new Integer(1)
 
@@ -107,6 +118,26 @@ class ThingsTest extends groovy.util.GroovyTestCase {
         things.addThing(integer);
         assert !notOneOfCondition.isMet(integer)
     }
+
+    void testOneOf() {
+        def object = new Object()
+
+        def things = new DefaultConditionThings()
+        def oneOfCondition = things.oneOf(String.class)
+
+        assert oneOfCondition.toString() != null
+
+        assert !oneOfCondition.isMet(object), "type that is not String should not lead to the condition being triggered"
+
+        String merp = "merp"
+
+        assert !oneOfCondition.isMet(merp)
+        things.addThing("merp");
+        things.addThing("derp");
+        assert oneOfCondition.isMet("merp")
+        assert !oneOfCondition.isMet("herp")
+    }
+
 
 
 
@@ -131,9 +162,9 @@ class ThingsTest extends groovy.util.GroovyTestCase {
     void testIsEmpty() {
 
         def things = new DefaultConditionThings()
-        BasePushCondition isEmpty = things.IsEmpty();
+        BasePushCondition isEmpty = things.isEmpty();
 
-        BasePushCondition isNotEmpty = things.IsNotEmpty();
+        BasePushCondition isNotEmpty = things.isNotEmpty();
 
         isEmpty.addListener(emptyListener,this);
         isNotEmpty.addListener(notEmptyListener,this);
@@ -154,5 +185,112 @@ class ThingsTest extends groovy.util.GroovyTestCase {
 
     }
 
+    class MyThingsListener implements ThingsListener<String> {
+        def added = 0
+        def removed = 0
+        def thingRemoved, thingAdded
 
+        @Override
+        void thingAdded(Things<String> things, String s) {
+            added++
+            thingAdded = s;
+        }
+
+        @Override
+        void thingRemoved(Things<String> things, String s) {
+            removed++
+            thingRemoved = s
+        }
+    }
+
+    void testObserve() {
+        def things = new DefaultConditionThings<String>()
+
+        def listener1 = new MyThingsListener()
+        def listener2 = new MyThingsListener()
+        things.observe(listener1)
+        things.observe(listener2)
+
+        things.addThing("hallo")
+        assert listener1.removed == 0
+        assert listener1.added == 1
+        assert listener1.thingAdded == "hallo"
+
+        things.addThing("hallo")
+        assert listener1.added == 2 && listener1.removed == 1, "ensure duplicate items are added, since they are removed and added"
+        assert listener1.thingRemoved == "hallo"
+
+        things.addThing("how are you")
+        assert listener1.added == 3
+        assert listener1.thingAdded == "how are you"
+
+        listener1.thingRemoved = null
+        things.removeThing("hallo")
+        assert listener1.removed == 2
+        assert listener1.thingRemoved == "hallo"
+
+        things.removeThing("hallo")
+        assert listener1.removed == 2, "ensure duplicate removal does not happen"
+
+        things.removeThing("merp")
+        assert listener1.removed == 2, "ensure removal of non existing things has no effect"
+
+        things.removeThing("how are you")
+        assert listener1.removed == 3
+        assert listener1.thingRemoved == "how are you"
+
+        assert listener1.removed == listener2.removed && listener1.added == listener2.added, "ensure both listeners were called"
+    }
+
+
+    void testThing() {
+        def thing = new DefaultConditionThing<String>("someThing");
+        thing.setOrReplaceThing("merp");
+        assert thing.getThings().toArray().size() == 1
+        assert thing.getThings().toArray()[0] == "merp"
+
+        thing.setOrReplaceThing("herp");
+        assert thing.getThings().toArray().size() == 1
+        assert thing.getThings().toArray()[0] == "herp"
+
+        thing.clear()
+        assert thing.getThings().toArray().size() == 0
+
+        shouldFail { thing.addThing("merp") }
+
+
+    }
+
+    void testAddedRemoved() {
+        def thing= new DefaultConditionThing<String>("someThing");
+
+        assert thing.toString() != null
+
+        def added = new Added(thing)
+        def removed = new Removed(thing)
+
+        assert added.toString() != null && removed.toString() != null
+
+        def addedString = null;
+        def removedString = null;
+
+        W.hen(added).then(new TypedAct() {
+            void act(String string) {
+                addedString = string;
+            }
+        }).work()
+
+        W.hen(removed).then(new TypedAct() {
+            void act(String string) {
+                removedString = string;
+            }
+        }).work()
+
+
+        thing.setOrReplaceThing("merp")
+        assert addedString == "merp" && removedString == null;
+
+        thing.setOrReplaceThing("herp")
+        assert addedString == "herp" && removedString == "merp"
+    }
 }
