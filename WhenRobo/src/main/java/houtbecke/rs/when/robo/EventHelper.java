@@ -20,6 +20,7 @@ import houtbecke.rs.when.robo.condition.event.ActivityResume;
 import houtbecke.rs.when.robo.condition.event.FragmentPause;
 import houtbecke.rs.when.robo.condition.event.FragmentResume;
 import houtbecke.rs.when.robo.condition.event.MenuItemSelect;
+import houtbecke.rs.when.robo.condition.event.SwipeRefresh;
 import houtbecke.rs.when.robo.condition.event.ViewClick;
 import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
@@ -102,4 +103,10 @@ public class EventHelper {
 
 
     }
+
+    public void onRefresh(View v, Activity activity) {
+        bus.post(new SwipeRefresh(v, activity));
+    }
+
+
 }
