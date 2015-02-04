@@ -20,9 +20,9 @@ public class Selected extends BasePushCondition {
     }
 
     @Subscribe public void onSelected(MenuItemSelect item) {
-        eventForThing(item.getObject(),item.getObject(), item.getActivity());
-        eventForThing(item.getResourceId(), item.getResourceId(),item.getActivity());
-        eventForThing(item.getSourceClass(), item.getSourceClass(),item.getActivity());
+        eventForThing(item.getObject(),item.getObject(), item.activity, item.view);
+        eventForThing(item.getResourceId(), item.getResourceId(),item.activity, item.view);
+        eventForThing(item.getSourceClass(), item.getSourceClass(),item.activity, item.view);
     }
 
 

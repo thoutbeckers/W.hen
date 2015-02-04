@@ -84,7 +84,10 @@ public class EventHelper {
     }
 
     public void onMenuItemSelected(MenuItem item,Activity activity) {
-        bus.post(new MenuItemSelect(item,activity));
+        onMenuItemSelected(item, activity, null);
+    }
+    public void onMenuItemSelected(MenuItem item,Activity activity, View view) {
+        bus.post(new MenuItemSelect(item,activity, view));
     }
 
     public void optionsMenuCreated(Menu menu) {
@@ -100,13 +103,10 @@ public class EventHelper {
         } else if (action == MotionEvent.ACTION_CANCEL) {
              bus.post(new ViewTouchCancel(v));
         }
-
-
     }
 
     public void onRefresh(View v, Activity activity) {
         bus.post(new SwipeRefresh(v, activity));
     }
-
 
 }
