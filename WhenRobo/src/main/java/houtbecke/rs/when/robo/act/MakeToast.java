@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import houtbecke.rs.when.TypedAct;
 import houtbecke.rs.when.robo.OnUiThread;
 
@@ -11,7 +13,7 @@ public class MakeToast extends AndroidTypedAct {
     Context context;
     Toast toast = null;
 
-    @javax.inject.Inject
+    @Inject
     public MakeToast(Context context) {
         this(context, null);
     }
@@ -45,7 +47,7 @@ public class MakeToast extends AndroidTypedAct {
 
     @OnUiThread
     public void act(Length length, Integer text) {
-        act(text+"", length.length);
+        act(length, context.getText(text));
     }
 
     @Override
