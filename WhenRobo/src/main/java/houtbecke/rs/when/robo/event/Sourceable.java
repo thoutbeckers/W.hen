@@ -1,9 +1,9 @@
 package houtbecke.rs.when.robo.event;
 
-public interface Sourceable {
+public interface Sourceable<T> {
 
     public Class getSourceClass();
-    public Object getObject();
+    public T getObject();
     public Integer getResourceId();
 
 }
