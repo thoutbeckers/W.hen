@@ -7,21 +7,22 @@ import javax.inject.Inject;
 
 import houtbecke.rs.when.BasePushCondition;
 import houtbecke.rs.when.robo.condition.event.SwipeRefresh;
-import houtbecke.rs.when.robo.condition.event.ViewClick;
 
+@SuppressWarnings("UnusedDeclaration")
 public class SwipeRefreshed extends BasePushCondition {
-
-    Bus bus;
 
     @Inject
     public SwipeRefreshed(Bus bus) {
         bus.register(this);
-        this.bus = bus;
     }
 
     @Subscribe public void onRefresh(SwipeRefresh view) {
         eventForThing(view.getResourceId(), view.getObject(), view.getActivity());
         eventForThing(view.getSourceClass(),view.getObject());
         eventForThing(view.getObject(),view.getObject());
+
+        Object refreshAction = view.getObject().getTag(houtbecke.rs.when.robo.R.id.tag_refresh);
+        if (refreshAction != null)
+            eventForThing(refreshAction, refreshAction);
     }
 }
