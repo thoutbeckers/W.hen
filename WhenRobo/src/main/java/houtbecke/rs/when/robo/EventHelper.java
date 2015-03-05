@@ -3,13 +3,14 @@ package houtbecke.rs.when.robo;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -109,4 +110,15 @@ public class EventHelper {
         bus.post(new SwipeRefresh(v, activity));
     }
 
+    public void setOnRefreshListenerForAction(final SwipeRefreshLayout swipeRefreshLayout, Object action) {
+        swipeRefreshLayout.setTag(houtbecke.rs.when.robo.R.id.tag_refresh, action);
+        swipeRefreshLayout.setOnRefreshListener(
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Context c = swipeRefreshLayout.getContext();
+                    EventHelper.this.onRefresh(swipeRefreshLayout, c instanceof Activity ? (Activity) c : null);
+                }
+            });
+    }
 }
