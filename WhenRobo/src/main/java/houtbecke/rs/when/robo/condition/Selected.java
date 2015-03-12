@@ -20,10 +20,25 @@ public class Selected extends BasePushCondition {
     }
 
     @Subscribe public void onSelected(MenuItemSelect item) {
-        eventForThing(item.getObject(),item.getObject(), item.activity, item.view);
-        eventForThing(item.getResourceId(), item.getResourceId(),item.activity, item.view);
-        eventForThing(item.getSourceClass(), item.getSourceClass(),item.activity, item.view);
+        if (item.activity != null && item.view != null) {
+            eventForThing(item.getObject(), item.getObject(), item.activity, item.view);
+            eventForThing(item.getResourceId(), item.getResourceId(), item.activity, item.view);
+            eventForThing(item.getSourceClass(), item.getSourceClass(), item.activity, item.view);
+        }
+        else if (item.activity != null) {
+            eventForThing(item.getObject(), item.getObject(), item.activity);
+            eventForThing(item.getResourceId(), item.getResourceId(), item.activity);
+            eventForThing(item.getSourceClass(), item.getSourceClass(), item.activity);
+        }
+        else if (item.view != null) {
+            eventForThing(item.getObject(), item.getObject(), item.view);
+            eventForThing(item.getResourceId(), item.getResourceId(), item.view);
+            eventForThing(item.getSourceClass(), item.getSourceClass(), item.view);
+        }
+        else {
+            eventForThing(item.getObject(), item.getObject());
+            eventForThing(item.getResourceId(), item.getResourceId());
+            eventForThing(item.getSourceClass(), item.getSourceClass());
+        }
     }
-
-
 }
