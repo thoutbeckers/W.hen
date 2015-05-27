@@ -6,10 +6,12 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import houtbecke.rs.when.BasePushCondition;
 import houtbecke.rs.when.robo.condition.event.MenuItemSelect;
 
+@Singleton
 public class Selected extends BasePushCondition {
     Bus bus;
 
