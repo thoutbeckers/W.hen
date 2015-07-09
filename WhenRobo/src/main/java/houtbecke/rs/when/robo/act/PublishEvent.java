@@ -22,7 +22,6 @@ import houtbecke.rs.when.robo.condition.event.ActivityResume;
 
 public class PublishEvent extends TypedAct {
 
-    @Inject
     Bus bus;
     final Map<Class, Object> eventTypeValueMap;
     final boolean saveLastValue;
@@ -30,22 +29,14 @@ public class PublishEvent extends TypedAct {
 
     final Handler handler;
 
-    public PublishEvent(Bus bus, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
-        this(null, bus, fromUiThread, saveLastValue, eventClasses);
-    }
-
     /**
-     * Use this constructor if you will use dependency injection beforeRegisterUseContext
-     * @param context
-     * @param fromUiThread
-     * @param saveLastValue
-     * @param eventClasses
+     * Only use this constructor if you will make sure to call setBus yourself!
      */
-    public PublishEvent(Context context, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
-        this(context, null, fromUiThread, saveLastValue, eventClasses);
+    public PublishEvent(boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
+        this(null, fromUiThread, saveLastValue, eventClasses);
     }
 
-    public PublishEvent(Context context, Bus bus, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
+    public PublishEvent(Bus bus, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
         handler = fromUiThread ? new Handler(Looper.getMainLooper()) : null;
         this.bus = bus;
         this.saveLastValue = saveLastValue;
@@ -58,15 +49,18 @@ public class PublishEvent extends TypedAct {
             for (Class eventClass: eventClasses)
                 eventTypeValueMap.put(eventClass, null);
 
-        if (context != null) beforeRegisterUseContext(context);
-
-        if (bus == null)
-            throw new RuntimeException("You must supply a non-null Bus or supply a Bus through Dependency Injection using beforeRegisterUseContext()");
-
-        bus.register(this);
+        if (bus != null)
+            bus.register(this);
     }
 
-    protected void beforeRegisterUseContext(Context context) {}
+    @Inject
+    /** this can be called by DI frameworks so the bus is only registered after Constructor injection is complete */
+    public void setBus(Bus bus) {
+        if (this.bus != null)
+            return;
+        this.bus = bus;
+        bus.register(this);
+    }
 
     public <T> T getLastValue(Class<? extends T> c) {
         return (T) eventTypeValueMap.get(c);
