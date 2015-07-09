@@ -1,6 +1,7 @@
 package houtbecke.rs.when.robo.act;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -21,15 +22,30 @@ import houtbecke.rs.when.robo.condition.event.ActivityResume;
 
 public class PublishEvent extends TypedAct {
 
-    final Bus bus;
+    @Inject
+    Bus bus;
     final Map<Class, Object> eventTypeValueMap;
     final boolean saveLastValue;
     final boolean postAll;
 
     final Handler handler;
 
-    @Inject
     public PublishEvent(Bus bus, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
+        this(null, bus, fromUiThread, saveLastValue, eventClasses);
+    }
+
+    /**
+     * Use this constructor if you will use dependency injection beforeRegisterUseContext
+     * @param context
+     * @param fromUiThread
+     * @param saveLastValue
+     * @param eventClasses
+     */
+    public PublishEvent(Context context, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
+        this(context, null, fromUiThread, saveLastValue, eventClasses);
+    }
+
+    public PublishEvent(Context context, Bus bus, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
         handler = fromUiThread ? new Handler(Looper.getMainLooper()) : null;
         this.bus = bus;
         this.saveLastValue = saveLastValue;
@@ -42,8 +58,15 @@ public class PublishEvent extends TypedAct {
             for (Class eventClass: eventClasses)
                 eventTypeValueMap.put(eventClass, null);
 
+        if (context != null) beforeRegisterUseContext(context);
+
+        if (bus == null)
+            throw new RuntimeException("You must supply a non-null Bus or supply a Bus through Dependency Injection using beforeRegisterUseContext()");
+
         bus.register(this);
     }
+
+    protected void beforeRegisterUseContext(Context context) {}
 
     public <T> T getLastValue(Class<? extends T> c) {
         return (T) eventTypeValueMap.get(c);
