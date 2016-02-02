@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.view.MotionEvent;
 import houtbecke.rs.when.robo.condition.event.ViewTouchCancel;
 import houtbecke.rs.when.robo.condition.event.ViewTouchDown;
 import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
+import houtbecke.rs.when.robo.condition.event.KeyUp;
 
 public class EventHelper {
 
@@ -78,6 +80,10 @@ public class EventHelper {
         bus.post(new FragmentPause(f));
         bus.unregister(this);
         bus.unregister(f);
+    }
+
+    public void onKeyUp(Activity activity, int keyCode, KeyEvent event) {
+        bus.post(new KeyUp(activity, keyCode, event));
     }
 
     public void onClick(View v, Activity activity) {
