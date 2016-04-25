@@ -3,13 +3,16 @@ allprojects {
     buildscript {
     }
     repositories {
+        jcenter()
         mavenCentral()
+
 
     }
 }
 
 buildscript {
     repositories {
+        jcenter()
         mavenCentral()
     }
 
@@ -19,8 +22,6 @@ buildscript {
         classpath 'org.apache.httpcomponents:httpmime:4.3'
 
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-        classpath 'com.android.tools.build:gradle:1.0.1'
-
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
