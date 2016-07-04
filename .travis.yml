@@ -1,5 +1,8 @@
 language: android
 
+jdk:
+- oraclejdk8
+
 android:
   components:
     - tools # important to always do this first, since the version installed of platform-tools below depends on it
