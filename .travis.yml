@@ -2,9 +2,10 @@ language: android
 
 android:
   components:
-  - platform-tools
-  - tools
-  - build-tools-23.0.3
+    - tools # important to always do this first, since the version installed of platform-tools below depends on it
+    - platform-tools
+    - build-tools-24.0.0
+    - android-24
 
 env:
     global:
