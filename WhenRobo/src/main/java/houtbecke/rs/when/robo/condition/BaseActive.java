@@ -22,7 +22,7 @@ public abstract class BaseActive extends BasePushCondition {
     final boolean onPause, onResume;
 
     @Inject
-    public BaseActive(Bus bus, boolean onResume, boolean onPause) {
+    public BaseActive(Bus bus, Boolean onResume, Boolean onPause) {
         subscriber = new Subscriber(bus);
         this.onResume = onResume;
         this.onPause = onPause;
