@@ -36,75 +36,73 @@ import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
 import houtbecke.rs.when.robo.condition.event.KeyUp;
 
 public class EventHelper {
-
+    
     Bus bus;
     @Inject
     public EventHelper(Bus bus) {
         this.bus = bus;
     }
-
+    
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Subscribe public void onInvalidateMenus(InvalidateMenus invalidateMenus) {
+        if (myActivity == null){
+            return;
+        }
+        
         Activity activity = myActivity.get();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && activity != null)
             activity.invalidateOptionsMenu();
-
     }
-
-    WeakReference<Fragment> myFragment;
+    
     WeakReference<Activity> myActivity;
-
+    
     public void onCreate(Activity activity) {
         myActivity = new WeakReference<>(activity);
     }
     
-    public void onCreate(Fragment fragment) {
-        myFragment = new WeakReference<>(fragment);
-    }
-
     public void onResume(Activity a) {
         bus.post(new ActivityResume(a));
         bus.register(this);
         bus.register(a);
     }
-
+    
     public void onResume(Fragment f) {
         bus.post(new FragmentResume(f));
         bus.register(this);
         bus.register(f);
     }
-
+    
     public void onPause(Activity a) {
         bus.post(new ActivityPause(a));
         bus.unregister(this);
         bus.unregister(a);
     }
-
+    
     public void onPause(Fragment f) {
         bus.post(new FragmentPause(f));
         bus.unregister(this);
         bus.unregister(f);
     }
-
+    
     public void onKeyUp(Activity activity, int keyCode, KeyEvent event) {
         bus.post(new KeyUp(activity, keyCode, event));
     }
-
+    
     public void onClick(View v, Activity activity) {
         bus.post(new ViewClick(v, activity));
     }
-
+    
     public void onMenuItemSelected(MenuItem item,Activity activity) {
         onMenuItemSelected(item, activity, null);
     }
     public void onMenuItemSelected(MenuItem item,Activity activity, View view) {
         bus.post(new MenuItemSelect(item,activity, view));
     }
-
+    
     public void optionsMenuCreated(Menu menu) {
         bus.post(new MenuCreated(menu));
     }
-
+    
     public void onTouch(android.view.View v, MotionEvent motionevent) {
         int action = motionevent.getAction();
         if (action == MotionEvent.ACTION_DOWN) {
@@ -112,23 +110,23 @@ public class EventHelper {
         } else if (action == MotionEvent.ACTION_UP) {
             bus.post(new ViewTouchUp(v));
         } else if (action == MotionEvent.ACTION_CANCEL) {
-             bus.post(new ViewTouchCancel(v));
+            bus.post(new ViewTouchCancel(v));
         }
     }
-
+    
     public void onRefresh(View v, Activity activity) {
         bus.post(new SwipeRefresh(v, activity));
     }
-
+    
     public void setOnRefreshListenerForAction(final SwipeRefreshLayout swipeRefreshLayout, Object action) {
         swipeRefreshLayout.setTag(houtbecke.rs.when.robo.R.id.tag_refresh, action);
         swipeRefreshLayout.setOnRefreshListener(
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    Context c = swipeRefreshLayout.getContext();
-                    EventHelper.this.onRefresh(swipeRefreshLayout, c instanceof Activity ? (Activity) c : null);
-                }
-            });
+                                                new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Context c = swipeRefreshLayout.getContext();
+                EventHelper.this.onRefresh(swipeRefreshLayout, c instanceof Activity ? (Activity) c : null);
+            }
+        });
     }
 }
