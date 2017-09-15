@@ -28,6 +28,8 @@ import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
 import android.view.MotionEvent;
 
+import java.lang.ref.WeakReference;
+
 import houtbecke.rs.when.robo.condition.event.ViewTouchCancel;
 import houtbecke.rs.when.robo.condition.event.ViewTouchDown;
 import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
@@ -43,19 +45,20 @@ public class EventHelper {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Subscribe public void onInvalidateMenus(InvalidateMenus invalidateMenus) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && myActivity != null)
-            myActivity.invalidateOptionsMenu();
+        if (myActivity == null){
+            return;
+        }
+        
+        Activity activity = myActivity.get();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && activity != null)
+            activity.invalidateOptionsMenu();
     }
+    
+    WeakReference<Activity> myActivity;
 
-    Fragment myFragment;
-    Activity myActivity;
 
     public void onCreate(Activity activity) {
-        myActivity = activity;
-    }
-
-    public void onCreate(Fragment fragment) {
-        myFragment = fragment;
+        myActivity = new WeakReference<>(activity);
     }
 
     public void onResume(Activity a) {
