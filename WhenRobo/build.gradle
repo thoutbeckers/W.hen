@@ -26,17 +26,5 @@ android {
 dependencies {
     compile project(':When')
     compile 'com.squareup:otto:1.3.4'
-<<<<<<< HEAD
     compile 'javax.inject:javax.inject:1'
 }
-=======
-    compile "com.android.support:support-v13:${supportVersion}"
-
-    provided "org.roboguice:roboguice:$roboGuiceVersion"
-    provided "org.roboguice:roboblender:$roboGuiceVersion"
-}
-
-project.tasks.withType(JavaCompile) { task ->
-    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=houtbecke.rs.when"
-}
->>>>>>> origin/master
