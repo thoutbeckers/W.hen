@@ -4,7 +4,7 @@ import android.view.View;
 
 import houtbecke.rs.when.robo.event.Sourceable;
 
-public class ViewEvent implements Sourceable{
+public class ViewEvent implements Sourceable<View> {
 
     View view;
 
@@ -18,7 +18,7 @@ public class ViewEvent implements Sourceable{
     }
 
     @Override
-    public Object getObject() {
+    public View getObject() {
         return view;
     }
 

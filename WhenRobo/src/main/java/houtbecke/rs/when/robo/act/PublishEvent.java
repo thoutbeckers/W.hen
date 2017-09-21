@@ -1,6 +1,7 @@
 package houtbecke.rs.when.robo.act;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -21,14 +22,20 @@ import houtbecke.rs.when.robo.condition.event.ActivityResume;
 
 public class PublishEvent extends TypedAct {
 
-    final Bus bus;
+    Bus bus;
     final Map<Class, Object> eventTypeValueMap;
     final boolean saveLastValue;
     final boolean postAll;
 
     final Handler handler;
 
-    @Inject
+    /**
+     * Only use this constructor if you will make sure to call setBus yourself!
+     */
+    public PublishEvent(boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
+        this(null, fromUiThread, saveLastValue, eventClasses);
+    }
+
     public PublishEvent(Bus bus, boolean fromUiThread, boolean saveLastValue, Class... eventClasses) {
         handler = fromUiThread ? new Handler(Looper.getMainLooper()) : null;
         this.bus = bus;
@@ -42,6 +49,16 @@ public class PublishEvent extends TypedAct {
             for (Class eventClass: eventClasses)
                 eventTypeValueMap.put(eventClass, null);
 
+        if (bus != null)
+            bus.register(this);
+    }
+
+    @Inject
+    /** this can be called by DI frameworks so the bus is only registered after Constructor injection is complete */
+    public void setBus(Bus bus) {
+        if (this.bus != null)
+            return;
+        this.bus = bus;
         bus.register(this);
     }
 

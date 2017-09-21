@@ -546,11 +546,14 @@ public class WhenBuilder implements PushCondition, PullCondition {
     public WhenBuilder and() {
         if (state == BuildingState.CONDITIONS) {
             switch(lastElement) {
+                case NOT:
+                    currentConditions.logic.put(currentCondition, Logic.AND_NOT);
+                    break;
                 case IS:
                     currentConditions.logic.put(currentCondition, Logic.AND);
                     break;
                 default:
-                    throw new IllegalArgumentException("can only put and() in a then() section or after a(), an() is() or are() or a statement with a thing or condition as parameter");
+                    throw new IllegalArgumentException("can only put and() in a when() section or after a(), an() is() or are() or a statement with a thing or condition as parameter");
 
             }
         } // else if we are in CONSEQUENCES acts and things will add up by default TODO enforce illegal use anyway such as and().or();

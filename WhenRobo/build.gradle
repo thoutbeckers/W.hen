@@ -1,12 +1,11 @@
-apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.0.2'
+    compileSdkVersion compileSdkVersionProp.toInteger()
+    buildToolsVersion "$buildToolsVersionProp"
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion targetSdkVersionProp.toInteger()
         versionCode 1
         versionName "1.0"
     }
@@ -16,15 +15,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+    productFlavors {
     }
 }
 
 dependencies {
     compile project(':When')
     compile 'com.squareup:otto:1.3.4'
+<<<<<<< HEAD
     compile 'javax.inject:javax.inject:1'
 }
+=======
+    compile "com.android.support:support-v13:${supportVersion}"
+
+    provided "org.roboguice:roboguice:$roboGuiceVersion"
+    provided "org.roboguice:roboblender:$roboGuiceVersion"
+}
+
+project.tasks.withType(JavaCompile) { task ->
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=houtbecke.rs.when"
+}
+>>>>>>> origin/master

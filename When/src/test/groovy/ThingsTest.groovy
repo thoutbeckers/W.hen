@@ -13,15 +13,14 @@ import houtbecke.rs.when.act.RemoveFrom
 import houtbecke.rs.when.condition.Added
 import houtbecke.rs.when.condition.Removed
 
-class ThingsTest extends groovy.util.GroovyTestCase {
+class ThingsTest extends GroovyTestCase {
 
     @Override
-    void setupBefore() {
+    void setUp() {
         added = null;
         removed = null;
     }
     def added, removed;
-
 
     def thingsListener = new PushConditionListener() {
 

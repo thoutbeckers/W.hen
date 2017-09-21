@@ -6,10 +6,12 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import houtbecke.rs.when.BasePushCondition;
 import houtbecke.rs.when.robo.condition.event.MenuItemSelect;
 
+@Singleton
 public class Selected extends BasePushCondition {
     Bus bus;
 
@@ -20,10 +22,25 @@ public class Selected extends BasePushCondition {
     }
 
     @Subscribe public void onSelected(MenuItemSelect item) {
-        eventForThing(item.getObject(),item.getObject(), item.getActivity());
-        eventForThing(item.getResourceId(), item.getResourceId(),item.getActivity());
-        eventForThing(item.getSourceClass(), item.getSourceClass(),item.getActivity());
+        if (item.activity != null && item.view != null) {
+            eventForThing(item.getObject(), item.getObject(), item.activity, item.view);
+            eventForThing(item.getResourceId(), item.getResourceId(), item.activity, item.view);
+            eventForThing(item.getSourceClass(), item.getSourceClass(), item.activity, item.view);
+        }
+        else if (item.activity != null) {
+            eventForThing(item.getObject(), item.getObject(), item.activity);
+            eventForThing(item.getResourceId(), item.getResourceId(), item.activity);
+            eventForThing(item.getSourceClass(), item.getSourceClass(), item.activity);
+        }
+        else if (item.view != null) {
+            eventForThing(item.getObject(), item.getObject(), item.view);
+            eventForThing(item.getResourceId(), item.getResourceId(), item.view);
+            eventForThing(item.getSourceClass(), item.getSourceClass(), item.view);
+        }
+        else {
+            eventForThing(item.getObject(), item.getObject());
+            eventForThing(item.getResourceId(), item.getResourceId());
+            eventForThing(item.getSourceClass(), item.getSourceClass());
+        }
     }
-
-
 }

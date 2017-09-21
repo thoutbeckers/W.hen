@@ -3,13 +3,15 @@ package houtbecke.rs.when.robo;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -20,14 +22,18 @@ import houtbecke.rs.when.robo.condition.event.ActivityResume;
 import houtbecke.rs.when.robo.condition.event.FragmentPause;
 import houtbecke.rs.when.robo.condition.event.FragmentResume;
 import houtbecke.rs.when.robo.condition.event.MenuItemSelect;
+import houtbecke.rs.when.robo.condition.event.SwipeRefresh;
 import houtbecke.rs.when.robo.condition.event.ViewClick;
 import houtbecke.rs.when.robo.condition.event.MenuCreated;
 
 import android.view.MotionEvent;
 
+import java.lang.ref.WeakReference;
+
 import houtbecke.rs.when.robo.condition.event.ViewTouchCancel;
 import houtbecke.rs.when.robo.condition.event.ViewTouchDown;
 import houtbecke.rs.when.robo.condition.event.ViewTouchUp;
+import houtbecke.rs.when.robo.condition.event.KeyUp;
 
 public class EventHelper {
 
@@ -39,19 +45,20 @@ public class EventHelper {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Subscribe public void onInvalidateMenus(InvalidateMenus invalidateMenus) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && myActivity != null)
-            myActivity.invalidateOptionsMenu();
+        if (myActivity == null){
+            return;
+        }
+        
+        Activity activity = myActivity.get();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && activity != null)
+            activity.invalidateOptionsMenu();
     }
+    
+    WeakReference<Activity> myActivity;
 
-    Fragment myFragment;
-    Activity myActivity;
 
     public void onCreate(Activity activity) {
-        myActivity = activity;
-    }
-
-    public void onCreate(Fragment fragment) {
-        myFragment = fragment;
+        myActivity = new WeakReference<>(activity);
     }
 
     public void onResume(Activity a) {
@@ -78,12 +85,19 @@ public class EventHelper {
         bus.unregister(f);
     }
 
+    public void onKeyUp(Activity activity, int keyCode, KeyEvent event) {
+        bus.post(new KeyUp(activity, keyCode, event));
+    }
+
     public void onClick(View v, Activity activity) {
         bus.post(new ViewClick(v, activity));
     }
 
     public void onMenuItemSelected(MenuItem item,Activity activity) {
-        bus.post(new MenuItemSelect(item,activity));
+        onMenuItemSelected(item, activity, null);
+    }
+    public void onMenuItemSelected(MenuItem item,Activity activity, View view) {
+        bus.post(new MenuItemSelect(item,activity, view));
     }
 
     public void optionsMenuCreated(Menu menu) {
@@ -99,7 +113,21 @@ public class EventHelper {
         } else if (action == MotionEvent.ACTION_CANCEL) {
              bus.post(new ViewTouchCancel(v));
         }
+    }
 
+    public void onRefresh(View v, Activity activity) {
+        bus.post(new SwipeRefresh(v, activity));
+    }
 
+    public void setOnRefreshListenerForAction(final SwipeRefreshLayout swipeRefreshLayout, Object action) {
+        swipeRefreshLayout.setTag(houtbecke.rs.when.robo.R.id.tag_refresh, action);
+        swipeRefreshLayout.setOnRefreshListener(
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Context c = swipeRefreshLayout.getContext();
+                    EventHelper.this.onRefresh(swipeRefreshLayout, c instanceof Activity ? (Activity) c : null);
+                }
+            });
     }
 }

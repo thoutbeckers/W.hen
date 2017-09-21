@@ -37,6 +37,18 @@ public class TypedAct implements Act {
         }
     }
 
+    private void nullMethod() {}
+
+    final private Method nullMethod;
+
+    public TypedAct() {
+        try {
+            nullMethod = TypedAct.class.getDeclaredMethod("nullMethod");
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("nullMethod on TypedAct not found. Perhaps you are using proguard renaming on Act classes?", e);
+        }
+    }
+
 
     Map<ParameterClasses, Method> actCache = new HashMap<ParameterClasses, Method>();
 
@@ -46,7 +58,7 @@ public class TypedAct implements Act {
             String lastTypeClassName = array.getName();
             String name = lastTypeClassName.substring(2, lastTypeClassName.length() - 1);
             return Class.forName(name);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }
@@ -78,12 +90,14 @@ public class TypedAct implements Act {
                     }
                 }
             }
+            if (cachedMethod == null)
+                cachedMethod = nullMethod;
 
             actCache.put(parameterClasses, cachedMethod);
-        } else
+        } else if (cachedMethod != nullMethod)
             parameters = tryMethod(cachedMethod, things);
 
-        if (parameters == null || cachedMethod == null){
+        if (parameters == null || cachedMethod == nullMethod){
             defaultAct(things);
             return;
         }
