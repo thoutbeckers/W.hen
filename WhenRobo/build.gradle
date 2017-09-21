@@ -26,7 +26,6 @@ android {
 dependencies {
     compile project(':When')
     compile 'com.squareup:otto:1.3.4'
-
     compile "com.android.support:support-v13:${supportVersion}"
 
     provided "org.roboguice:roboguice:$roboGuiceVersion"
