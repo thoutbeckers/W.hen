@@ -8,6 +8,12 @@ android {
         targetSdkVersion targetSdkVersionProp.toInteger()
         versionCode 1
         versionName "1.0"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
     buildTypes {
         release {
@@ -30,6 +36,7 @@ dependencies {
 
     provided "org.roboguice:roboguice:$roboGuiceVersion"
     provided "org.roboguice:roboblender:$roboGuiceVersion"
+
 }
 
 project.tasks.withType(JavaCompile) { task ->
