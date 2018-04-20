@@ -24,12 +24,12 @@ android {
 }
 
 dependencies {
-    compile project(':When')
-    compile 'com.squareup:otto:1.3.4'
-    compile "com.android.support:support-v13:${supportVersion}"
+    api project(':When')
+    api 'com.squareup:otto:1.3.4'
+    implementation "com.android.support:support-v13:${supportVersion}"
 
-    provided "org.roboguice:roboguice:$roboGuiceVersion"
-    provided "org.roboguice:roboblender:$roboGuiceVersion"
+    compileOnly "org.roboguice:roboguice:$roboGuiceVersion"
+    compileOnly "org.roboguice:roboblender:$roboGuiceVersion"
     annotationProcessor "org.roboguice:roboblender:$roboGuiceVersion"
 }
 
