@@ -1,6 +1,6 @@
 package houtbecke.rs.when.robo.condition.event;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import houtbecke.rs.when.robo.event.ResumeEvent;
 
