@@ -6,10 +6,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class Active extends BaseActive {
+public class PostActive extends BaseActive {
 
     @Inject
-    public Active(Bus bus) {
+    public PostActive(Bus bus) {
         super(bus, true, false, false, false);
     }
 }
