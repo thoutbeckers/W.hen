@@ -18,6 +18,8 @@ import com.squareup.otto.Subscribe;
 
 import houtbecke.rs.when.robo.act.event.InvalidateMenus;
 import houtbecke.rs.when.robo.condition.event.ActivityPause;
+import houtbecke.rs.when.robo.condition.event.ActivityPostPause;
+import houtbecke.rs.when.robo.condition.event.ActivityPostResume;
 import houtbecke.rs.when.robo.condition.event.ActivityResume;
 import houtbecke.rs.when.robo.condition.event.FragmentPause;
 import houtbecke.rs.when.robo.condition.event.FragmentResume;
@@ -65,6 +67,7 @@ public class EventHelper {
         bus.post(new ActivityResume(a));
         bus.register(this);
         bus.register(a);
+        bus.register(new ActivityPostResume(a));
     }
 
     public void onResume(Fragment f) {
@@ -77,6 +80,7 @@ public class EventHelper {
         bus.post(new ActivityPause(a));
         bus.unregister(this);
         bus.unregister(a);
+        bus.post(new ActivityPostPause(a));
     }
 
     public void onPause(Fragment f) {

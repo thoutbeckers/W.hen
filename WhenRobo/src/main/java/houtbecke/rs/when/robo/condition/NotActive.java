@@ -20,7 +20,7 @@ public class NotActive extends BaseActive {
 
     @Inject
     public NotActive(Bus bus) {
-        super(bus, false, true);
+        super(bus, false, true, false, false);
     }
 
 }
